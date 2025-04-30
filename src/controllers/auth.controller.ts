@@ -90,43 +90,6 @@ const verifyCode = async (req: Request, res: Response) => {
       .send(`INTERNAL SERVER ERROR`);
   }
 };
-// const verifyCode = async (req: Request, res: Response) => {
-//   try {
-//     const client = twilio(
-//       process.env.TWILIO_ACCOUNT_SID as string,
-//       process.env.TWILIO_AUTH_TOKEN as string
-//     );
-//     const verifySid = process.env.TWILIO_VERIFY_SID as string;
-//     const { phone, code } = req.body;
-
-//     if (!phone || !code) {
-//       return res
-//         .status(HTTP_STATUS.BAD_REQUEST)
-//         .send(failure("Please provide phone number and code"));
-//     }
-
-//     const verificationCheck = await client.verify.v2
-//       .services(verifySid)
-//       .verificationChecks.create({ to: phone, code });
-
-//     console.log("verificationCheck", verificationCheck);
-
-//     if (verificationCheck.status === "approved") {
-//       return res
-//         .status(HTTP_STATUS.OK)
-//         .send(success("Phone number verified successfully"));
-//     } else {
-//       return res
-//         .status(HTTP_STATUS.BAD_REQUEST)
-//         .send(failure("Invalid verification code"));
-//     }
-//   } catch (err) {
-//     console.log(err);
-//     return res
-//       .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-//       .send(`INTERNAL SERVER ERROR`);
-//   }
-// };
 
 const signup = async (req: Request, res: Response) => {
   try {
