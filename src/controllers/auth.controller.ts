@@ -14,38 +14,6 @@ import { CreateUserQueryParams } from "../types/query-params";
 
 import { IUser } from "../interfaces/user.interface";
 
-// const sendVerificationCodeToPhone = async (req: Request, res: Response) => {
-//   try {
-//     const client = twilio(
-//       process.env.TWILIO_ACCOUNT_SID as string,
-//       process.env.TWILIO_AUTH_TOKEN as string
-//     );
-//     const verifySid = process.env.TWILIO_VERIFY_SID as string;
-
-//     const { phone } = req.body;
-
-//     if (!phone) {
-//       return res.status(400).send(success("Phone number is required"));
-//     }
-
-//     const verification = await client.verify.v2
-//       .services(verifySid)
-//       .verifications.create({ to: phone, channel: "sms" });
-
-//     console.log("verification", verification);
-
-//     return res.status(HTTP_STATUS.OK).send(
-//       success("Verification code sent successfully", {
-//         verification: { sid: verification.sid },
-//       })
-//     );
-//   } catch (err) {
-//     console.log(err);
-//     return res
-//       .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-//       .send(failure("INTERNAL SERVER ERROR"));
-//   }
-// };
 const sendVerificationCodeToPhone = async (req: Request, res: Response) => {
   try {
     const client = twilio(
