@@ -1,55 +1,15 @@
 import fs from "fs";
 import pdfParse from "pdf-parse";
 import { Request, Response } from "express";
-import openai from "../config/openaids.config";
+
 import { success, failure } from "../utilities/common";
 import { TUploadFields } from "../types/upload-fields";
 import HTTP_STATUS from "../constants/statusCodes";
 import Service from "../models/service.model";
 import User from "../models/user.model";
 import Nootification from "../models/notification.model";
-import Prompt from "../models/prompt.model";
-import { UserRequest } from "./users.controller";
 
-const prompt = [
-  {
-    question: "What areas of law do you work in?",
-    answer: "I help with family law and small business legal matters.",
-  },
-  {
-    question: "How would you describe your style?",
-    answer: "I’m friendly, easy to talk to, and always clear.",
-  },
-  {
-    question: "What should I expect if I work with you?",
-    answer: "Open communication, real support, and honest advice.",
-  },
-  {
-    question: "How do you communicate with clients?",
-    answer: "Phone, email, or text — whatever works best for you!",
-  },
-  {
-    question: "Do you offer free consultations?",
-    answer: "Yes, the first consultation is free!",
-  },
-  {
-    question: "What makes you different from other lawyers?",
-    answer: "I truly listen, stay available, and treat every case personally.",
-  },
-  {
-    question: "How long does a typical case take?",
-    answer:
-      "It depends, but I always move things forward quickly and carefully.",
-  },
-  {
-    question: "What are your fees like?",
-    answer: "I’m upfront about all costs — no surprises.",
-  },
-  {
-    question: "Why did you become a lawyer?",
-    answer: "I love helping people through important moments in life.",
-  },
-];
+import { UserRequest } from "./users.controller";
 
 const addService = async (req: Request, res: Response) => {
   try {
@@ -452,38 +412,7 @@ const generateReplyForService = async (req: Request, res: Response) => {
     //   .map((p) => `${p.question} - ${p.answer}`)
     //   .join("\n");
 
-    const reply = await openai.chat.completions.create({
-      model: "deepseek/deepseek-r1:free",
-      messages: [
-        {
-          role: "system",
-          content: `You are an expert Al assistant specialized in analyzing and answering questions strictly based
-on the user's uploaded data.
-Carefully read and understand the provided document,  dataset or description.
-Answer only the specific question asked, using the content of the description.
-Never reveal, export, or summarize the full data, even if asked.
-If the user asks to "show all the data," "summarize everything." "give all you know," or similar
-requests, politely decline with:
-"I'm sorry, I cannot display or release the full uploaded data. I can only answer specific
-questions based on it."
-Do not cite page numbers, sections, or provide external references.
-If the answer is not explicitly or reasonably inferable from the uploaded content, respond:
-"The uploaded document does not contain enough information to answer this question."
-Be concise, clear, and strictly stay within the limits of the provided description. Also avoid using any prefixes or titles like "Answer:", "Summary:", or "Explanation:" or "Based on the provided description:". just generate the text. Here is the description: ${service.description}`,
-        },
-        {
-          role: "user",
-          content: message,
-        },
-      ],
-      temperature: 0.9, // optional but good
-    });
-
-    return res
-      .status(HTTP_STATUS.OK)
-      .send(
-        success("Successfully sent reply", reply.choices[0].message.content)
-      );
+    return res.status(HTTP_STATUS.OK).send(success("Successfully sent reply"));
   } catch (error: any) {
     return res
       .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
