@@ -10,31 +10,31 @@ export interface UserRequest extends Request {
 
 const isAuthorizedAdmin = (req: Request, res: Response, next: NextFunction) => {
   try {
-    // const { authorization } = req.headers;
-    const { token } = req.cookies;
+    const { authorization } = req.headers;
+    // const { token } = req.cookies;
 
-    console.log("tokenCookie", token);
-    if (!token) {
-      return res
-        .status(HTTP_STATUS.UNAUTHORIZED)
-        .send(failure("Unauthorized access, admin not logged in"));
-    }
-    // console.log(authorization);
-    // if (!authorization) {
+    // console.log("tokenCookie", token);
+    // if (!token) {
     //   return res
     //     .status(HTTP_STATUS.UNAUTHORIZED)
     //     .send(failure("Unauthorized access, admin not logged in"));
     // }
-    // const tokenHeader = authorization.split(" ")[1];
-    // console.log("token", tokenHeader);
-    // const validate = jsonWebToken.verify(
-    //   tokenHeader,
-    //   process.env.JWT_SECRET ?? "default_secret"
-    // ) as JwtPayload;
+    console.log(authorization);
+    if (!authorization) {
+      return res
+        .status(HTTP_STATUS.UNAUTHORIZED)
+        .send(failure("Unauthorized access, admin not logged in"));
+    }
+    const tokenHeader = authorization.split(" ")[1];
+    console.log("token", tokenHeader);
     const validate = jsonWebToken.verify(
-      token,
+      tokenHeader,
       process.env.JWT_SECRET ?? "default_secret"
     ) as JwtPayload;
+    // const validate = jsonWebToken.verify(
+    //   token,
+    //   process.env.JWT_SECRET ?? "default_secret"
+    // ) as JwtPayload;
 
     if (!validate) {
       return res
@@ -128,29 +128,29 @@ const isAuthorizedUser = (req: Request, res: Response, next: NextFunction) => {
     console.log("headers", req.headers);
 
     const { authorization } = req.headers;
-    const { token: tokenCookie } = req.cookies;
-    if (!tokenCookie) {
-      return res
-        .status(HTTP_STATUS.UNAUTHORIZED)
-        .send(failure("Unauthorized access, user not logged in"));
-    }
-    console.log("tokenCookie", tokenCookie);
-    // if (!authorization) {
+    // const { token: tokenCookie } = req.cookies;
+    // if (!tokenCookie) {
     //   return res
     //     .status(HTTP_STATUS.UNAUTHORIZED)
-    //     .send(failure("Unauthorized access"));
+    //     .send(failure("Unauthorized access, user not logged in"));
     // }
-    // console.log(authorization);
-    // const tokenHeader = authorization.split(" ")[1];
-    // console.log("tokenHeader", tokenHeader);
-    // const validate = jsonWebToken.verify(
-    //   tokenHeader,
-    //   process.env.JWT_SECRET ?? "default_secret"
-    // ) as JwtPayload;
+    // console.log("tokenCookie", tokenCookie);
+    if (!authorization) {
+      return res
+        .status(HTTP_STATUS.UNAUTHORIZED)
+        .send(failure("Unauthorized access"));
+    }
+    console.log(authorization);
+    const tokenHeader = authorization.split(" ")[1];
+    console.log("tokenHeader", tokenHeader);
     const validate = jsonWebToken.verify(
-      tokenCookie,
+      tokenHeader,
       process.env.JWT_SECRET ?? "default_secret"
     ) as JwtPayload;
+    // const validate = jsonWebToken.verify(
+    //   tokenCookie,
+    //   process.env.JWT_SECRET ?? "default_secret"
+    // ) as JwtPayload;
 
     if (!validate) {
       return res
