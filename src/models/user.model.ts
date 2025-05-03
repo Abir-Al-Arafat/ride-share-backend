@@ -4,11 +4,10 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      // required: true,
     },
     username: {
       type: String,
-      required: [true, "please provide a username"],
+
       unique: true,
     },
     email: {
@@ -18,13 +17,12 @@ const userSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      required: false,
     },
     password: {
       type: String,
       required: [true, "Please provide a password"],
       minlength: 5,
-      // select: false,
+      select: false,
     },
     address: {
       type: String,
@@ -97,7 +95,7 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
 
-    reviewId: { type: mongoose.Schema.Types.ObjectId, ref: "Review" },
+    reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
   },
   { timestamps: true }
 );
