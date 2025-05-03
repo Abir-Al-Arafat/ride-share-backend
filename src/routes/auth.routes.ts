@@ -5,6 +5,7 @@ import {
   signup,
   login,
   sendVerificationCodeToPhone,
+  sendOTP,
   verifyEmail,
 } from "../controllers/auth.controller";
 import multer from "multer";
@@ -36,27 +37,24 @@ routes.post(
 );
 
 routes.post(
-  "/verify-code",
+  "/verify-email",
   // userValidator.create,
   // authValidator.create,
   upload.none(),
   verifyEmail
 );
 
+routes.post(
+  "/send-otp",
+  // userValidator.create,
+  // authValidator.create,
+  upload.none(),
+  sendOTP
+);
+
 // for logging in
 routes.post("/login", upload.none(), login);
 
-routes.get(
-  "/users",
-  isAuthorizedAdmin,
-  (req: Request, res: Response, next: NextFunction) => {
-    try {
-      return res.status(200).json("HIT");
-    } catch (error) {
-      return res.status(500).json(error);
-    }
-  }
-);
 // routes.post(
 //   "/auth/create-admin",
 //   // userValidator.create,
@@ -65,25 +63,10 @@ routes.get(
 //   createAdmin
 // );
 
-// for signing up as doctor
-// routes.post(
-//   "/auth/signup-as-affiliate",
-//   // userValidator.create,
-//   // authValidator.create,
-//   signupAsAffiliate
-// );
-
 // routes.post(
 //   "/auth/connect-stripe-account",
 //   isAuthorizedUser,
 //   connectStripeAccount
-// );
-
-// routes.post(
-//   "/auth/verify-email",
-//   // userValidator.create,
-//   // authValidator.create,
-//   verifyEmail
 // );
 
 // routes.post(
@@ -127,8 +110,6 @@ routes.get(
 
 // for logging in
 // routes.post("/auth/login-as-doctor", authValidator.login, loginAsDoctor);
-
-// routes.post("/auth/send-otp-again", sendOTPAgain);
 
 // // for logging in
 // routes.post("/auth/logout", logout);

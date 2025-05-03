@@ -290,4 +290,48 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
-export { signup, login, sendVerificationCodeToPhone, verifyEmail };
+const sendOTP = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(failure("Please provide email"));
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
+        .send(failure("User not found"));
+    }
+
+    const otp = generateRandomCode(4);
+
+    user.emailVerifyCode = otp;
+
+    await user.save();
+
+    const emailData = {
+      email: user.email,
+      subject: "OTP Verification",
+      html: `
+                    <h6>Hello, ${user.name || user.email || "User"}</h6>
+                    <p>Your OTP is <h6>${otp}</h6> to verify your account</p>
+                    
+                  `,
+    };
+
+    emailWithNodemailerGmail(emailData);
+
+    return res.status(HTTP_STATUS.OK).send(success("OTP sent successfully"));
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Internal server error"));
+  }
+};
+export { signup, login, sendVerificationCodeToPhone, sendOTP, verifyEmail };
