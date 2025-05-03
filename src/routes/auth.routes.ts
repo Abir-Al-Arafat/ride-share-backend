@@ -7,6 +7,7 @@ import {
   sendVerificationCodeToPhone,
   sendOTP,
   verifyEmail,
+  resetPassword,
 } from "../controllers/auth.controller";
 import multer from "multer";
 
@@ -16,7 +17,7 @@ import {
   isAuthorizedAdmin,
   isAuthorizedSuperAdmin,
 } from "../middlewares/authValidationJWT";
-// const { authValidator } = require("../middleware/authValidation");
+
 const routes = express();
 const upload = multer();
 // for signing up
@@ -55,6 +56,8 @@ routes.post(
 // for logging in
 routes.post("/login", upload.none(), login);
 
+routes.post("/reset-password", authValidator.resetPassword, resetPassword);
+
 // routes.post(
 //   "/auth/create-admin",
 //   // userValidator.create,
@@ -74,13 +77,6 @@ routes.post("/login", upload.none(), login);
 //   // userValidator.create,
 //   // authValidator.create,
 //   forgotPassword
-// );
-
-// routes.post(
-//   "/auth/reset-password",
-//   // userValidator.create,
-//   // authValidator.create,
-//   resetPassword
 // );
 
 // routes.post(

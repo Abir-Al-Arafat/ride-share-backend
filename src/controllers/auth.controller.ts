@@ -334,4 +334,54 @@ const sendOTP = async (req: Request, res: Response) => {
       .send(failure("Internal server error"));
   }
 };
-export { signup, login, sendVerificationCodeToPhone, sendOTP, verifyEmail };
+
+const resetPassword = async (req: Request, res: Response) => {
+  try {
+    const validation = validationResult(req).array();
+    console.log(validation);
+    if (validation.length > 0) {
+      return res
+        .status(HTTP_STATUS.OK)
+        .send(failure("Password reset failed", validation[0].msg));
+    }
+
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
+        .send(failure("User not found"));
+    }
+
+    if (!user.emailVerified) {
+      return res
+        .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
+        .send(failure("Please verify your email first"));
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    user.password = hashedPassword;
+
+    await user.save();
+
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("Password reset successfully"));
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Internal server error"));
+  }
+};
+export {
+  signup,
+  login,
+  sendVerificationCodeToPhone,
+  sendOTP,
+  verifyEmail,
+  resetPassword,
+};
