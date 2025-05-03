@@ -27,10 +27,10 @@ const sendVerificationCodeToPhone = async (req: Request, res: Response) => {
       return res.status(400).send(success("Phone number is required"));
     }
 
-    const phoneNumberVerifyCode = generateRandomCode(6);
+    const phoneNumberVerifyCode = generateRandomCode(4);
 
     const newPhone = await Phone.create({
-      phoneNumber: phone,
+      email: phone,
       phoneNumberVerifyCode,
     });
 
@@ -57,32 +57,31 @@ const sendVerificationCodeToPhone = async (req: Request, res: Response) => {
   }
 };
 
-const verifyCode = async (req: Request, res: Response) => {
+const verifyEmail = async (req: Request, res: Response) => {
   try {
-    const { phone, code } = req.body;
+    const { email, emailVerifyCode } = req.body;
 
-    if (!phone || !code) {
+    if (!email || !emailVerifyCode) {
       return res
         .status(HTTP_STATUS.BAD_REQUEST)
         .send(failure("Please provide phone number and code"));
     }
 
-    const verificationCheck = await Phone.findOne({
-      phoneNumber: phone,
-      phoneNumberVerifyCode: code,
+    const isVerified = await User.findOne({
+      email,
+      emailVerifyCode,
     });
 
-    if (verificationCheck) {
-      verificationCheck.phoneNumberVerified = true;
-      await verificationCheck.save();
+    if (isVerified) {
+      isVerified.emailVerified = true;
+      await isVerified.save();
       return res
         .status(HTTP_STATUS.OK)
-        .send(success("Phone number verified successfully"));
-    } else {
-      return res
-        .status(HTTP_STATUS.BAD_REQUEST)
-        .send(failure("Invalid verification code"));
+        .send(success("Email verified successfully"));
     }
+    return res
+      .status(HTTP_STATUS.BAD_REQUEST)
+      .send(failure("Invalid verification code"));
   } catch (err) {
     console.log(err);
     return res
@@ -118,7 +117,7 @@ const signup = async (req: Request, res: Response) => {
     const emailCheck = await User.findOne({ email: req.body.email });
 
     if (emailCheck && !emailCheck.emailVerified) {
-      const emailVerifyCode = generateRandomCode(6);
+      const emailVerifyCode = generateRandomCode(4);
       emailCheck.emailVerifyCode = emailVerifyCode;
       await emailCheck.save();
 
@@ -128,7 +127,7 @@ const signup = async (req: Request, res: Response) => {
         html: `
                         <div style="max-width: 500px; background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); text-align: center; font-family: Arial, sans-serif;">
         <h6 style="font-size: 16px; color: #333;">Hello, ${
-          emailCheck?.name || "User"
+          emailCheck?.name || emailCheck?.email || "User"
         }</h6>
         <p style="font-size: 14px; color: #555;">Your email verification code is:</p>
         <div style="font-size: 24px; font-weight: bold; color: #d32f2f; background: #f8d7da; display: inline-block; padding: 10px 20px; border-radius: 5px; margin-top: 10px;">
@@ -154,12 +153,10 @@ const signup = async (req: Request, res: Response) => {
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-    const emailVerifyCode = generateRandomCode(6);
+    const emailVerifyCode = generateRandomCode(4);
 
     const newUser = await User.create({
-      name: req.body.name,
       email: req.body.email,
-      username: req.body.username,
       roles: req.body.roles || "user",
       password: hashedPassword,
       emailVerifyCode,
@@ -219,7 +216,7 @@ const signup = async (req: Request, res: Response) => {
     console.log(err);
     return res
       .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-      .send(`INTERNAL SERVER ERROR`);
+      .send(failure("Internal server error"));
   }
 };
 
@@ -233,7 +230,7 @@ const login = async (req: Request, res: Response) => {
         .send(failure("Please provide email and password"));
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
       return res
@@ -293,4 +290,4 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
-export { signup, login, sendVerificationCodeToPhone, verifyCode };
+export { signup, login, sendVerificationCodeToPhone, verifyEmail };
