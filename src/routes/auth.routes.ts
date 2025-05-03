@@ -5,7 +5,7 @@ import {
   signup,
   login,
   sendVerificationCodeToPhone,
-  verifyCode,
+  verifyEmail,
 } from "../controllers/auth.controller";
 import multer from "multer";
 
@@ -40,7 +40,7 @@ routes.post(
   // userValidator.create,
   // authValidator.create,
   upload.none(),
-  verifyCode
+  verifyEmail
 );
 
 // for logging in
