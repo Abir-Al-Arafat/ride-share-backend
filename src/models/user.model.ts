@@ -24,6 +24,12 @@ const userSchema = new mongoose.Schema(
       minlength: 5,
       select: false,
     },
+    location: {
+      coordinates: {
+        latitude: { type: Number },
+        longitude: { type: Number },
+      },
+    },
     address: {
       type: String,
     },
