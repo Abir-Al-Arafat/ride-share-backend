@@ -1,4 +1,7 @@
+import passport from "passport";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import express from "express";
+import "../config/passport"; // import passport setup
 import { Request, Response, NextFunction, RequestHandler } from "express";
 
 import {
@@ -20,6 +23,48 @@ import {
 
 const routes = express();
 const upload = multer();
+
+routes.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+// 2. Handle Google callback
+routes.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    session: false,
+    failureRedirect: "/login",
+  }),
+  async (req, res) => {
+    try {
+      const user = req.user as any;
+      console.log("user", user);
+      const expiresIn = process.env.JWT_EXPIRES_IN
+        ? parseInt(process.env.JWT_EXPIRES_IN, 10)
+        : 3600; // default to 1 hour if not set
+      const token = jwt.sign(
+        { _id: user._id, roles: user.roles },
+        process.env.JWT_SECRET ?? "default_secret",
+        { expiresIn }
+      );
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 3600000,
+      });
+
+      // redirect to frontend with token (optional: include as query param)
+      res.redirect(`${process.env.CLIENT_URL}/?token=${token}`);
+    } catch (error) {
+      console.log("error", error);
+      res.status(500).send("Internal Server Error");
+    }
+  }
+);
+
 // for signing up
 routes.post(
   "/signup",
