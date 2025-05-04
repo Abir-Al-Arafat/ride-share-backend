@@ -7,7 +7,9 @@ const userSchema = new mongoose.Schema(
     },
     username: {
       type: String,
-
+      default: function () {
+        return `user_${Date.now()}`;
+      },
       unique: true,
     },
     email: {
@@ -20,8 +22,14 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, "Please provide a password"],
-      minlength: 5,
+      // required: [
+      //   function (this: any) {
+      //     return !this.googleId; // Check for googleId
+      //   },
+      //   "Please provide a password",
+      // ],
+
+      // minlength: 5,
       select: false,
     },
     location: {
