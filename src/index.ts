@@ -4,6 +4,7 @@ import path from "path";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { Request, Response, NextFunction } from "express";
+import passport from "passport";
 import databaseConnection from "./config/database";
 import userRouter from "./routes/user.routes";
 import authRouter from "./routes/auth.routes";
@@ -13,7 +14,8 @@ const app = express();
 dotenv.config();
 
 app.use(cors({ origin: "*", credentials: true }));
-
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(cookieParser()); // Needed to read cookies
 app.use(express.json()); // Parses data as JSON
 app.use(express.text()); // Parses data as text
