@@ -11,6 +11,7 @@ import {
   sendOTP,
   verifyEmail,
   resetPassword,
+  changePassword,
 } from "../controllers/auth.controller";
 import multer from "multer";
 
@@ -103,6 +104,13 @@ routes.post("/login", upload.none(), login);
 
 routes.post("/reset-password", authValidator.resetPassword, resetPassword);
 
+routes.post(
+  "/change-password",
+  upload.none(),
+  isAuthorizedUser,
+  changePassword
+);
+
 // routes.post(
 //   "/auth/create-admin",
 //   // userValidator.create,
@@ -122,13 +130,6 @@ routes.post("/reset-password", authValidator.resetPassword, resetPassword);
 //   // userValidator.create,
 //   // authValidator.create,
 //   forgotPassword
-// );
-
-// routes.post(
-//   "/auth/change-password",
-//   // userValidator.create,
-//   // authValidator.create,
-//   changePassword
 // );
 
 // // for approving doctor

@@ -13,6 +13,11 @@ import { emailWithNodemailerGmail } from "../config/email.config";
 import { CreateUserQueryParams } from "../types/query-params";
 
 import { IUser } from "../interfaces/user.interface";
+// import { UserRequest } from "./users.controller";
+
+export interface UserRequest extends Request {
+  user?: IUser;
+}
 
 const sendVerificationCodeToPhone = async (req: Request, res: Response) => {
   try {
@@ -312,6 +317,8 @@ const sendOTP = async (req: Request, res: Response) => {
 
     user.emailVerifyCode = otp;
 
+    user.emailVerified = false;
+
     await user.save();
 
     const emailData = {
@@ -326,7 +333,9 @@ const sendOTP = async (req: Request, res: Response) => {
 
     emailWithNodemailerGmail(emailData);
 
-    return res.status(HTTP_STATUS.OK).send(success("OTP sent successfully"));
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("OTP sent successfully", { otp }));
   } catch (err) {
     console.log(err);
     return res
@@ -377,6 +386,57 @@ const resetPassword = async (req: Request, res: Response) => {
       .send(failure("Internal server error"));
   }
 };
+
+const changePassword = async (req: UserRequest, res: Response) => {
+  try {
+    // const validation = validationResult(req).array();
+    // console.log(validation);
+    // if (validation.length > 0) {
+    //   return res
+    //     .status(HTTP_STATUS.OK)
+    //     .send(failure("Password reset failed", validation[0].msg));
+    // }
+
+    const { oldPassword, newPassword, confirmNewPassword } = req.body;
+
+    const user = await User.findById(req.user?._id).select("+password");
+
+    if (!user) {
+      return res
+        .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
+        .send(failure("User not , please login "));
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password!);
+
+    if (!isMatch) {
+      return res
+        .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
+        .send(failure("Old password is incorrect"));
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      return res
+        .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
+        .send(failure("New password and confirm password do not match"));
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    user.password = hashedPassword;
+
+    await user.save();
+
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("Password changed successfully"));
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Internal server error"));
+  }
+};
 export {
   signup,
   login,
@@ -384,4 +444,5 @@ export {
   sendOTP,
   verifyEmail,
   resetPassword,
+  changePassword,
 };
