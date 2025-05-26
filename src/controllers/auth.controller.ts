@@ -399,6 +399,16 @@ const changePassword = async (req: UserRequest, res: Response) => {
 
     const { oldPassword, newPassword, confirmNewPassword } = req.body;
 
+    if (!oldPassword || !newPassword || !confirmNewPassword) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(
+          failure(
+            "Please provide old password, new password and confirm new password"
+          )
+        );
+    }
+
     const user = await User.findById(req.user?._id).select("+password");
 
     if (!user) {
