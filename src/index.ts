@@ -14,12 +14,15 @@ const app = express();
 dotenv.config();
 
 app.use(cors({ origin: "*", credentials: true }));
-app.use(passport.initialize());
-app.use(passport.session());
+
 app.use(cookieParser()); // Needed to read cookies
 app.use(express.json()); // Parses data as JSON
 app.use(express.text()); // Parses data as text
 app.use(express.urlencoded({ extended: false })); // Parses data as URL-encoded
+
+// google auth using passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 // ✅ Handle Invalid JSON Errors
 app.use(
