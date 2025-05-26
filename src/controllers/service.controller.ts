@@ -8,10 +8,15 @@ import HTTP_STATUS from "../constants/statusCodes";
 import Service from "../models/service.model";
 import User from "../models/user.model";
 import Nootification from "../models/notification.model";
+import { IUser } from "../interfaces/user.interface";
 
-import { UserRequest } from "./users.controller";
+// import { UserRequest } from "./users.controller";
 
-const addService = async (req: Request, res: Response) => {
+export interface UserRequest extends Request {
+  user?: IUser;
+}
+
+const addService = async (req: UserRequest, res: Response) => {
   try {
     if (!(req as UserRequest).user) {
       return res
@@ -40,7 +45,7 @@ const addService = async (req: Request, res: Response) => {
       about,
       category,
       explainMembership,
-      contributor: (req as UserRequest).user._id,
+      // contributor: (req as UserRequest).user._id,
       status: "approved",
     });
 
@@ -328,23 +333,23 @@ const getServiceById = async (req: Request, res: Response) => {
 
 const getServiceByContributor = async (req: Request, res: Response) => {
   try {
-    if (!(req as UserRequest).user || !(req as UserRequest).user._id) {
-      return res
-        .status(HTTP_STATUS.UNAUTHORIZED)
-        .send(failure("Please login to become a contributor"));
-    }
-    const service = await Service.find({
-      contributor: (req as UserRequest).user._id,
-    });
+    // if (!(req as UserRequest).user || !(req as UserRequest).user._id) {
+    //   return res
+    //     .status(HTTP_STATUS.UNAUTHORIZED)
+    //     .send(failure("Please login to become a contributor"));
+    // }
+    // const service = await Service.find({
+    //   contributor: (req as UserRequest).user._id,
+    // });
 
-    if (!service) {
-      return res
-        .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("Service not found"));
-    }
+    // if (!service) {
+    //   return res
+    //     .status(HTTP_STATUS.NOT_FOUND)
+    //     .send(failure("Service not found"));
+    // }
     return res
       .status(HTTP_STATUS.OK)
-      .send(success("Successfully received service", service));
+      .send(success("Successfully received service"));
   } catch (error: any) {
     return res
       .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
