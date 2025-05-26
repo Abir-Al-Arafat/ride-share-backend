@@ -404,7 +404,7 @@ const changePassword = async (req: UserRequest, res: Response) => {
     if (!user) {
       return res
         .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
-        .send(failure("User not , please login "));
+        .send(failure("User not found, please login "));
     }
 
     const isMatch = await bcrypt.compare(oldPassword, user.password!);
