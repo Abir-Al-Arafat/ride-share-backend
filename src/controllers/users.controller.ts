@@ -12,7 +12,7 @@ import Notification from "../models/notification.model";
 import { IUser } from "../interfaces/user.interface";
 
 export interface UserRequest extends Request {
-  user: IUser;
+  user?: IUser;
 }
 
 const getAllUsers = async (req: Request, res: Response) => {
