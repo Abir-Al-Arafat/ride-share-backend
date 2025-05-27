@@ -32,10 +32,13 @@ const configureFileUpload = () => {
       "audioFile",
       "pdfFiles",
       "previewPdfFiles",
+      "passportFront",
+      "passportBack",
+      "drivingLicenseFront",
+      "drivingLicenseBack",
     ];
 
     if (file.fieldname === undefined) {
-      // Allow requests without any files
       cb(null, true);
     } else if (allowedFieldnames.includes(file.fieldname)) {
       if (
@@ -62,8 +65,12 @@ const configureFileUpload = () => {
     { name: "categoryImage", maxCount: 1 },
     { name: "videoFile", maxCount: 1 },
     { name: "audioFile", maxCount: 1 },
-    { name: "pdfFiles", maxCount: 5 }, // ✅ Added PDF field
-    { name: "previewPdfFiles", maxCount: 3 }, // ✅ Added preview PDF field
+    { name: "pdfFiles", maxCount: 5 },
+    { name: "previewPdfFiles", maxCount: 3 },
+    { name: "passportFront", maxCount: 1 },
+    { name: "passportBack", maxCount: 1 },
+    { name: "drivingLicenseFront", maxCount: 1 },
+    { name: "drivingLicenseBack", maxCount: 1 },
   ]);
 
   return upload;
