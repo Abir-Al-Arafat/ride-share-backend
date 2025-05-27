@@ -41,6 +41,9 @@ const userSchema = new mongoose.Schema(
     address: {
       type: String,
     },
+    drivingCity: {
+      type: String,
+    },
 
     paymentIntent: {
       type: String,
