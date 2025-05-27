@@ -7,12 +7,16 @@ import { success, failure, generateRandomCode } from "../utilities/common";
 import User from "../models/user.model";
 import Phone from "../models/phone.model";
 import Notification from "../models/notification.model";
+import passportModel from "../models/passportDocument.model";
+import licenceModel from "../models/licence.model";
 
 import HTTP_STATUS from "../constants/statusCodes";
 import { emailWithNodemailerGmail } from "../config/email.config";
 import { CreateUserQueryParams } from "../types/query-params";
 
 import { IUser } from "../interfaces/user.interface";
+import { TUploadFields } from "../types/upload-fields";
+import passport from "passport";
 // import { UserRequest } from "./users.controller";
 
 export interface UserRequest extends Request {
@@ -447,8 +451,148 @@ const changePassword = async (req: UserRequest, res: Response) => {
       .send(failure("Internal server error"));
   }
 };
+
+const becomeADriver = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    if (!req.user || !req.user._id) {
+      return res
+        .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
+        .send(failure("User not logged in"));
+    }
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res
+        .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
+        .send(failure("User not found"));
+    }
+    const validation = validationResult(req).array();
+    console.log(validation);
+    if (validation.length > 0) {
+      return res
+        .status(HTTP_STATUS.OK)
+        .send(failure("Failed to add the user", validation[0].msg));
+    }
+
+    const { name, phone, address, drivingCity } = req.body;
+
+    const files = req.files as TUploadFields;
+    console.log("files", files);
+
+    if (
+      !req.files ||
+      files?.["passportFront"]?.length === 0 ||
+      files?.["passportBack"]?.length === 0
+    ) {
+      return res
+        .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
+        .send(failure("Please upload your passport front and back images"));
+    }
+
+    if (
+      !req.files ||
+      files?.["drivingLicenseFront"]?.length === 0 ||
+      files?.["drivingLicenseBack"]?.length === 0
+    ) {
+      return res
+        .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
+        .send(
+          failure("Please upload your driving license front and back images")
+        );
+    }
+
+    let passportFront = "";
+    let passportBack = "";
+
+    if (req.files && files?.["passportFront"] && files?.["passportBack"]) {
+      if (files?.passportFront[0] && files?.passportBack[0]) {
+        // Add public/uploads link to the new image file
+        passportFront = `public/uploads/images/${files?.passportFront[0]?.filename}`;
+        passportBack = `public/uploads/images/${files?.passportBack[0]?.filename}`;
+      }
+    }
+
+    let drivingLicenseFront = "";
+    let drivingLicenceBack = "";
+    if (
+      req.files &&
+      files?.["drivingLicenseFront"] &&
+      files?.["drivingLicenceBack"]
+    ) {
+      if (files?.drivingLicenseFront[0] && files?.drivingLicenceBack[0]) {
+        // Add public/uploads link to the new image file
+        drivingLicenseFront = `public/uploads/images/${files?.drivingLicenseFront[0]?.filename}`;
+        drivingLicenceBack = `public/uploads/images/${files?.drivingLicenceBack[0]?.filename}`;
+      }
+    }
+    let licence;
+    let passport;
+    if (
+      passportFront &&
+      passportBack &&
+      drivingLicenseFront &&
+      drivingLicenceBack
+    ) {
+      licence = await licenceModel.create({
+        user: req.user._id,
+        frontImageUrl: drivingLicenseFront,
+        backImageUrl: drivingLicenceBack,
+      });
+      passport = await passportModel.create({
+        user: req.user._id,
+        frontImageUrl: passportFront,
+        backImageUrl: passportBack,
+      });
+
+      if (!passport) {
+        return res
+          .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
+          .send(failure("Failed to save passport"));
+      }
+
+      if (!licence) {
+        return res
+          .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
+          .send(failure("Failed to save driving licence"));
+      }
+    }
+    let selfieImage = "";
+    if (req.files && files?.["image"] && files?.["image"][0]) {
+      // Add public/uploads link to the new image file
+      selfieImage = `public/uploads/images/${files?.image[0]?.filename}`;
+    }
+    if (selfieImage) {
+      user.selfieForDriverApproval = selfieImage;
+    }
+
+    user.name = name || user.name;
+    user.phone = phone || user.phone;
+    user.address = address || user.address;
+    user.drivingCity = drivingCity || user.drivingCity;
+
+    if (passport) user.passportDocument = (passport as any)._id;
+    if (licence) user.licenceDocument = (licence as any)._id;
+
+    user.driverApprovalStatus = "pending";
+
+    await user.save();
+
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("User added successfully", user));
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Internal server error"));
+  }
+};
+
 export {
   signup,
+  becomeADriver,
   login,
   sendVerificationCodeToPhone,
   sendOTP,
