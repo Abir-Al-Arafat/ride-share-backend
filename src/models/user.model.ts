@@ -78,6 +78,15 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["male", "female", "other"],
     },
+    passportDocument: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "PassportDocument",
+    },
+
+    licenceDocument: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Licence",
+    },
 
     balance: {
       type: Number,
@@ -100,6 +109,20 @@ const userSchema = new mongoose.Schema(
 
     emailVerifyCode: {
       type: Number,
+    },
+
+    isDriver: {
+      type: Boolean,
+      default: false,
+    },
+
+    selfieForDriverApproval: {
+      type: String,
+    },
+
+    driverApprovalStatus: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
     },
 
     isActive: {
