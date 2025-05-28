@@ -6,6 +6,7 @@ import { Request, Response, NextFunction, RequestHandler } from "express";
 
 import {
   signup,
+  becomeADriver,
   login,
   sendVerificationCodeToPhone,
   sendOTP,
@@ -73,6 +74,14 @@ routes.post(
   // authValidator.create,
   upload.none(),
   signup
+);
+
+routes.post(
+  "/become-a-driver",
+  // userValidator.create,
+  // authValidator.create,
+  upload.none(),
+  becomeADriver
 );
 
 routes.post(

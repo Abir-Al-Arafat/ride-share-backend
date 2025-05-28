@@ -7,8 +7,9 @@ import { success, failure, generateRandomCode } from "../utilities/common";
 import User from "../models/user.model";
 import Phone from "../models/phone.model";
 import Notification from "../models/notification.model";
-import passportModel from "../models/passportDocument.model";
-import licenceModel from "../models/licence.model";
+import passportIdentityModel from "../models/passportIdentity.model";
+import Licence from "../models/licence.model";
+import Vehicle from "../models/vehicle.model";
 
 import HTTP_STATUS from "../constants/statusCodes";
 import { emailWithNodemailerGmail } from "../config/email.config";
@@ -16,7 +17,6 @@ import { CreateUserQueryParams } from "../types/query-params";
 
 import { IUser } from "../interfaces/user.interface";
 import { TUploadFields } from "../types/upload-fields";
-import passport from "passport";
 // import { UserRequest } from "./users.controller";
 
 export interface UserRequest extends Request {
@@ -241,10 +241,22 @@ const login = async (req: Request, res: Response) => {
 
     const user = await User.findOne({ email }).select("+password");
 
+    if (user?.googleId) {
+      return res
+        .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
+        .send(failure("Please login with google account"));
+    }
+
     if (!user) {
       return res
         .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
         .send(failure("Invalid email or password"));
+    }
+
+    if (!user.password) {
+      return res
+        .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
+        .send(failure("password not set"));
     }
 
     const isMatch = await bcrypt.compare(password, user.password!);
@@ -453,7 +465,7 @@ const changePassword = async (req: UserRequest, res: Response) => {
 };
 
 const becomeADriver = async (
-  req: Request,
+  req: UserRequest,
   res: Response
 ): Promise<Response> => {
   try {
@@ -476,19 +488,29 @@ const becomeADriver = async (
         .send(failure("Failed to add the user", validation[0].msg));
     }
 
-    const { name, phone, address, drivingCity } = req.body;
+    const {
+      name,
+      phone,
+      address,
+      drivingCity,
+      carModel,
+      manufactureYear,
+      vin,
+    } = req.body;
 
     const files = req.files as TUploadFields;
     console.log("files", files);
 
     if (
       !req.files ||
-      files?.["passportFront"]?.length === 0 ||
-      files?.["passportBack"]?.length === 0
+      files?.["passportIdFront"]?.length === 0 ||
+      files?.["passportIdBack"]?.length === 0
     ) {
       return res
         .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
-        .send(failure("Please upload your passport front and back images"));
+        .send(
+          failure("Please upload your passport or id front and back images")
+        );
     }
 
     if (
@@ -503,14 +525,14 @@ const becomeADriver = async (
         );
     }
 
-    let passportFront = "";
-    let passportBack = "";
+    let passportIdFront = "";
+    let passportIdBack = "";
 
-    if (req.files && files?.["passportFront"] && files?.["passportBack"]) {
-      if (files?.passportFront[0] && files?.passportBack[0]) {
+    if (req.files && files?.["passportIdFront"] && files?.["passportIdBack"]) {
+      if (files?.passportIdFront[0] && files?.passportIdBack[0]) {
         // Add public/uploads link to the new image file
-        passportFront = `public/uploads/images/${files?.passportFront[0]?.filename}`;
-        passportBack = `public/uploads/images/${files?.passportBack[0]?.filename}`;
+        passportIdFront = `public/uploads/images/${files?.passportIdFront[0]?.filename}`;
+        passportIdBack = `public/uploads/images/${files?.passportIdBack[0]?.filename}`;
       }
     }
 
@@ -528,25 +550,25 @@ const becomeADriver = async (
       }
     }
     let licence;
-    let passport;
+    let passportID;
     if (
-      passportFront &&
-      passportBack &&
+      passportIdFront &&
+      passportIdBack &&
       drivingLicenseFront &&
       drivingLicenceBack
     ) {
-      licence = await licenceModel.create({
+      licence = await Licence.create({
         user: req.user._id,
         frontImageUrl: drivingLicenseFront,
         backImageUrl: drivingLicenceBack,
       });
-      passport = await passportModel.create({
+      passportID = await passportIdentityModel.create({
         user: req.user._id,
-        frontImageUrl: passportFront,
-        backImageUrl: passportBack,
+        frontImageUrl: passportIdFront,
+        backImageUrl: passportIdBack,
       });
 
-      if (!passport) {
+      if (!passportID) {
         return res
           .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
           .send(failure("Failed to save passport"));
@@ -572,16 +594,59 @@ const becomeADriver = async (
     user.address = address || user.address;
     user.drivingCity = drivingCity || user.drivingCity;
 
-    if (passport) user.passportDocument = (passport as any)._id;
+    if (passportID) user.passportIdentity = (passportID as any)._id;
     if (licence) user.licenceDocument = (licence as any)._id;
+
+    let carImages;
+    if (files?.["carImages"] && files?.["carImages"][0]) {
+      carImages = files?.carImages.map((file) => {
+        return `public/uploads/images/${file.filename}`;
+      });
+    }
+
+    const newVehicle = await Vehicle.create({
+      user: user._id,
+      carModel,
+      manufactureYear,
+      vin,
+      images: carImages,
+    });
+
+    if (!newVehicle) {
+      return res
+        .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
+        .send(failure("Failed to save vehicle details"));
+    }
 
     user.driverApprovalStatus = "pending";
 
     await user.save();
 
+    const admins = await User.find({
+      roles: { $in: ["admin", "superadmin"] },
+    }).select("_id");
+
+    if (!admins) {
+      console.error("No admins found");
+    }
+
+    const adminIds = admins.map((admin) => admin._id);
+
+    const notification = await Notification.create({
+      applicant: user._id,
+      title: "Driver Application",
+      message: "driver application is under review",
+      type: "driver_application",
+      admins: adminIds,
+    });
+
+    if (!notification) {
+      console.error("Failed to save notification");
+    }
+
     return res
       .status(HTTP_STATUS.OK)
-      .send(success("User added successfully", user));
+      .send(success("driver application submitted", user));
   } catch (err) {
     console.log(err);
     return res
