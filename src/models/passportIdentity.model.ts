@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, ObjectId } from "mongoose";
 
-export interface IPassportDocument extends Document {
+export interface IPassportIdentity extends Document {
   user: ObjectId; // Reference to the User
   passportNumber?: string;
   frontImageUrl: string; // URL or path to the front image
@@ -8,7 +8,7 @@ export interface IPassportDocument extends Document {
   verified?: boolean;
 }
 
-const PassportDocumentSchema = new Schema<IPassportDocument>(
+const PassportIdentitySchema = new Schema<IPassportIdentity>(
   {
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     passportNumber: { type: Number },
@@ -19,7 +19,7 @@ const PassportDocumentSchema = new Schema<IPassportDocument>(
   { timestamps: true }
 );
 
-export default mongoose.model<IPassportDocument>(
-  "PassportDocument",
-  PassportDocumentSchema
+export default mongoose.model<IPassportIdentity>(
+  "PassportIdentity",
+  PassportIdentitySchema
 );
