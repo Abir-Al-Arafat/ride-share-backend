@@ -32,10 +32,11 @@ const configureFileUpload = () => {
       "audioFile",
       "pdfFiles",
       "previewPdfFiles",
-      "passportFront",
-      "passportBack",
+      "passportIdFront",
+      "passportIdBack",
       "drivingLicenseFront",
       "drivingLicenseBack",
+      "carImages",
     ];
 
     if (file.fieldname === undefined) {
@@ -67,10 +68,11 @@ const configureFileUpload = () => {
     { name: "audioFile", maxCount: 1 },
     { name: "pdfFiles", maxCount: 5 },
     { name: "previewPdfFiles", maxCount: 3 },
-    { name: "passportFront", maxCount: 1 },
-    { name: "passportBack", maxCount: 1 },
+    { name: "passportIdFront", maxCount: 1 },
+    { name: "passportIdBack", maxCount: 1 },
     { name: "drivingLicenseFront", maxCount: 1 },
     { name: "drivingLicenseBack", maxCount: 1 },
+    { name: "carImages", maxCount: 10 },
   ]);
 
   return upload;
