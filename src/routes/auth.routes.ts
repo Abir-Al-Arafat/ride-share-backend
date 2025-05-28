@@ -16,7 +16,11 @@ import {
 } from "../controllers/auth.controller";
 import multer from "multer";
 
-import { userValidator, authValidator } from "../middlewares/validation";
+import {
+  userValidator,
+  authValidator,
+  driverValidator,
+} from "../middlewares/validation";
 import {
   isAuthorizedUser,
   isAuthorizedAdmin,
@@ -84,6 +88,7 @@ routes.post(
   // authValidator.create,
   isAuthorizedUser,
   fileUpload(),
+  driverValidator.becomeADriver,
   becomeADriver
 );
 

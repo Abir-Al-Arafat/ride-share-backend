@@ -491,7 +491,7 @@ const becomeADriver = async (
     if (validation.length > 0) {
       return res
         .status(HTTP_STATUS.OK)
-        .send(failure("Failed to add the user", validation[0].msg));
+        .send(failure("Failed to apply as a driver", validation[0].msg));
     }
 
     const {
@@ -601,6 +601,11 @@ const becomeADriver = async (
           .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
           .send(failure("Failed to save driving licence"));
       }
+    }
+    if (!req.files || !files?.["image"]) {
+      return res
+        .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
+        .send(failure("Please upload your selfie image for driver approval"));
     }
     let selfieImage = "";
     if (req.files && files?.["image"] && files?.["image"][0]) {
