@@ -6,26 +6,24 @@ const notificationSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    admin: {
+    admins: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    applicant: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    confession: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Confession",
-    },
-    story: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Story",
-    },
-    forum: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Forum",
-    },
+
     status: {
       type: String,
       enum: ["pending", "approved", "cancelled"],
       default: "pending",
+    },
+    title: {
+      type: String,
     },
     message: {
       type: String,
@@ -41,7 +39,7 @@ const notificationSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ["service", "forum", "story", "others"],
+      enum: ["driver_application", "service", "forum", "story", "others"],
       default: "others",
     },
   },
