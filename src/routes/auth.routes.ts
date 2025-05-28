@@ -7,6 +7,8 @@ import { Request, Response, NextFunction, RequestHandler } from "express";
 import {
   signup,
   becomeADriver,
+  approveDriver,
+  rejectDriver,
   login,
   sendVerificationCodeToPhone,
   sendOTP,
@@ -90,6 +92,24 @@ routes.post(
   fileUpload(),
   driverValidator.becomeADriver,
   becomeADriver
+);
+
+routes.post(
+  "/approve-driver",
+  // userValidator.create,
+  // authValidator.create,
+  // isAuthorizedAdmin,
+  upload.none(),
+  approveDriver
+);
+
+routes.post(
+  "/reject-driver",
+  // userValidator.create,
+  // authValidator.create,
+  // isAuthorizedAdmin,
+  upload.none(),
+  rejectDriver
 );
 
 routes.post(

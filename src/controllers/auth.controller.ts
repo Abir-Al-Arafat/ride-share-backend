@@ -682,9 +682,52 @@ const becomeADriver = async (
   }
 };
 
+const approveDriver = async (req: UserRequest, res: Response) => {
+  try {
+    const { driverId } = req.body;
+    const driver = await User.findById(driverId);
+    console.log("driver", driver);
+    if (!driver) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Driver not found"));
+    }
+    driver.driverApprovalStatus = "approved";
+    await driver.save();
+    return res.status(HTTP_STATUS.OK).send(success("Driver approved", driver));
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Internal server error"));
+  }
+};
+
+const rejectDriver = async (req: UserRequest, res: Response) => {
+  try {
+    const { driverId } = req.body;
+    const driver = await User.findById(driverId);
+    if (!driver) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Driver not found"));
+    }
+    driver.driverApprovalStatus = "rejected";
+    await driver.save();
+    return res.status(HTTP_STATUS.OK).send(success("Driver rejected", driver));
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Internal server error"));
+  }
+};
+
 export {
   signup,
   becomeADriver,
+  approveDriver,
+  rejectDriver,
   login,
   sendVerificationCodeToPhone,
   sendOTP,
