@@ -23,6 +23,8 @@ import {
   isAuthorizedSuperAdmin,
 } from "../middlewares/authValidationJWT";
 
+import fileUpload from "../middlewares/fileUpload";
+
 const routes = express();
 const upload = multer();
 
@@ -80,7 +82,8 @@ routes.post(
   "/become-a-driver",
   // userValidator.create,
   // authValidator.create,
-  upload.none(),
+  isAuthorizedUser,
+  fileUpload(),
   becomeADriver
 );
 
