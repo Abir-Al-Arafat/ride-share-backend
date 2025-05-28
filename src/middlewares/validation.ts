@@ -394,6 +394,47 @@ const authValidator = {
   ],
 };
 
+const driverValidator = {
+  becomeADriver: [
+    body("phone")
+      .exists()
+      .withMessage("Phone Number was not provided")
+      .bail()
+      .isString()
+      .withMessage("Phone Number must be a string"),
+    body("address")
+      .exists()
+      .withMessage("Address was not provided")
+      .bail()
+      .isString()
+      .withMessage("Address must be a string"),
+    body("drivingCity")
+      .exists()
+      .withMessage("Driving City was not provided")
+      .bail()
+      .isString()
+      .withMessage("Driving City must be a string"),
+    body("manufactureYear")
+      .exists()
+      .withMessage("Manufacture Year was not provided")
+      .bail()
+      .isString()
+      .withMessage("Manufacture Year must be a string"),
+    body("carModel")
+      .exists()
+      .withMessage("Car Model was not provided")
+      .bail()
+      .isString()
+      .withMessage("Car Model must be a string"),
+    body("vin")
+      .exists()
+      .withMessage("VIN was not provided")
+      .bail()
+      .isString()
+      .withMessage("VIN must be a string"),
+  ],
+};
+
 const reviewValidator = {
   addReview: [
     param("id")
@@ -541,4 +582,5 @@ export {
   authValidator,
   reviewValidator,
   discountValidator,
+  driverValidator,
 };
