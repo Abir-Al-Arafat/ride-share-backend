@@ -20,16 +20,19 @@ const userSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    googleId: {
+      type: String,
+    },
     password: {
       type: String,
-      // required: [
-      //   function (this: any) {
-      //     return !this.googleId; // Check for googleId
-      //   },
-      //   "Please provide a password",
-      // ],
+      required: [
+        function (this: any) {
+          return !this.googleId; // Check for googleId
+        },
+        "Please provide a password",
+      ],
 
-      // minlength: 5,
+      minlength: 5,
       select: false,
     },
     location: {
@@ -78,9 +81,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["male", "female", "other"],
     },
-    passportDocument: {
+    passportIdentity: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "PassportDocument",
+      ref: "PassportIdentity",
     },
 
     licenceDocument: {
