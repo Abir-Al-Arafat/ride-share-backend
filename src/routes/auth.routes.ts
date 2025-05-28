@@ -167,9 +167,6 @@ routes.post(
 //   cancelAffiliate
 // );
 
-// for logging in
-// routes.post("/auth/login-as-doctor", authValidator.login, loginAsDoctor);
-
 // // for logging in
 // routes.post("/auth/logout", logout);
 
