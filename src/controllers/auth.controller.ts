@@ -259,6 +259,12 @@ const login = async (req: Request, res: Response) => {
         .send(failure("password not set"));
     }
 
+    if (!user.emailVerified) {
+      return res
+        .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
+        .send(failure("Please verify your email"));
+    }
+
     const isMatch = await bcrypt.compare(password, user.password!);
 
     if (!isMatch) {
@@ -500,11 +506,20 @@ const becomeADriver = async (
 
     const files = req.files as TUploadFields;
     console.log("files", files);
+    console.log("req.files", req.files);
+    console.log(
+      `files?.["passportIdFront"]?.length`,
+      files?.["passportIdFront"]?.length
+    );
+    console.log(
+      `files?.["passportIdBack"]?.length`,
+      files?.["passportIdBack"]?.length
+    );
 
     if (
       !req.files ||
-      files?.["passportIdFront"]?.length === 0 ||
-      files?.["passportIdBack"]?.length === 0
+      !files?.["passportIdFront"]?.length ||
+      !files?.["passportIdBack"]?.length
     ) {
       return res
         .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
@@ -515,8 +530,8 @@ const becomeADriver = async (
 
     if (
       !req.files ||
-      files?.["drivingLicenseFront"]?.length === 0 ||
-      files?.["drivingLicenseBack"]?.length === 0
+      !files?.["drivingLicenseFront"] ||
+      !files?.["drivingLicenseBack"]
     ) {
       return res
         .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
@@ -537,30 +552,37 @@ const becomeADriver = async (
     }
 
     let drivingLicenseFront = "";
-    let drivingLicenceBack = "";
+    let drivingLicenseBack = "";
     if (
       req.files &&
       files?.["drivingLicenseFront"] &&
-      files?.["drivingLicenceBack"]
+      files?.["drivingLicenseBack"]
     ) {
-      if (files?.drivingLicenseFront[0] && files?.drivingLicenceBack[0]) {
+      if (files?.drivingLicenseFront[0] && files?.drivingLicenseBack[0]) {
         // Add public/uploads link to the new image file
         drivingLicenseFront = `public/uploads/images/${files?.drivingLicenseFront[0]?.filename}`;
-        drivingLicenceBack = `public/uploads/images/${files?.drivingLicenceBack[0]?.filename}`;
+        drivingLicenseBack = `public/uploads/images/${files?.drivingLicenseBack[0]?.filename}`;
       }
     }
     let licence;
     let passportID;
+    console.log(
+      "passportIdFront",
+      passportIdFront,
+      passportIdBack,
+      drivingLicenseFront,
+      drivingLicenseBack
+    );
     if (
       passportIdFront &&
       passportIdBack &&
       drivingLicenseFront &&
-      drivingLicenceBack
+      drivingLicenseBack
     ) {
       licence = await Licence.create({
         user: req.user._id,
         frontImageUrl: drivingLicenseFront,
-        backImageUrl: drivingLicenceBack,
+        backImageUrl: drivingLicenseBack,
       });
       passportID = await passportIdentityModel.create({
         user: req.user._id,
