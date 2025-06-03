@@ -3,10 +3,7 @@ import jsonWebToken, { JwtPayload } from "jsonwebtoken";
 import HTTP_STATUS from "../constants/statusCodes";
 import { failure } from "../utilities/common";
 import { IUser } from "../interfaces/user.interface";
-
-export interface UserRequest extends Request {
-  user: IUser;
-}
+import { UserRequest } from "../interfaces/user.interface";
 
 const isAuthorizedAdmin = (req: Request, res: Response, next: NextFunction) => {
   try {

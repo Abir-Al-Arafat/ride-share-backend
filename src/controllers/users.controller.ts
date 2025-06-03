@@ -9,11 +9,7 @@ import { validationResult } from "express-validator";
 import HTTP_STATUS from "../constants/statusCodes";
 import User from "../models/user.model";
 import Notification from "../models/notification.model";
-import { IUser } from "../interfaces/user.interface";
-
-export interface UserRequest extends Request {
-  user?: IUser;
-}
+import { UserRequest } from "../interfaces/user.interface";
 
 const getAllUsers = async (req: Request, res: Response) => {
   try {

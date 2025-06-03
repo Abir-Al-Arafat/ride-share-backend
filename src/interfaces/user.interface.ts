@@ -1,4 +1,5 @@
 import { Model, ObjectId } from "mongoose";
+import { Request } from "express";
 
 export interface IUser {
   _id?: ObjectId;

@@ -15,13 +15,8 @@ import HTTP_STATUS from "../constants/statusCodes";
 import { emailWithNodemailerGmail } from "../config/email.config";
 import { CreateUserQueryParams } from "../types/query-params";
 
-import { IUser } from "../interfaces/user.interface";
 import { TUploadFields } from "../types/upload-fields";
-// import { UserRequest } from "./users.controller";
-
-export interface UserRequest extends Request {
-  user?: IUser;
-}
+import { UserRequest } from "../interfaces/user.interface";
 
 const sendVerificationCodeToPhone = async (req: Request, res: Response) => {
   try {

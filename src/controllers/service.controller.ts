@@ -8,13 +8,8 @@ import HTTP_STATUS from "../constants/statusCodes";
 import Service from "../models/service.model";
 import User from "../models/user.model";
 import Nootification from "../models/notification.model";
-import { IUser } from "../interfaces/user.interface";
 
-// import { UserRequest } from "./users.controller";
-
-export interface UserRequest extends Request {
-  user?: IUser;
-}
+import { UserRequest } from "../interfaces/user.interface";
 
 const addService = async (req: UserRequest, res: Response) => {
   try {
