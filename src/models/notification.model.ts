@@ -6,6 +6,10 @@ const notificationSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    driver: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
     admins: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -13,6 +17,10 @@ const notificationSchema = new mongoose.Schema(
       },
     ],
     applicant: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    passenger: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
@@ -39,7 +47,7 @@ const notificationSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ["driver_application", "service", "forum", "story", "others"],
+      enum: ["driver_application", "service", "forum", "others"],
       default: "others",
     },
   },
