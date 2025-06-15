@@ -626,6 +626,13 @@ const becomeADriver = async (
       });
     }
 
+    const vinExists = await Vehicle.findOne({ vin });
+    if (vinExists) {
+      return res
+        .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
+        .send(failure("VIN already exists"));
+    }
+
     const newVehicle = await Vehicle.create({
       user: user._id,
       carModel,
