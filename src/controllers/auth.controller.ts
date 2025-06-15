@@ -687,7 +687,10 @@ const approveDriver = async (req: UserRequest, res: Response) => {
         .status(HTTP_STATUS.NOT_FOUND)
         .send(failure("Driver not found"));
     }
+
     driver.driverApprovalStatus = "approved";
+    driver.roles.push("driver");
+
     await driver.save();
     return res.status(HTTP_STATUS.OK).send(success("Driver approved", driver));
   } catch (err) {
@@ -708,6 +711,7 @@ const rejectDriver = async (req: UserRequest, res: Response) => {
         .send(failure("Driver not found"));
     }
     driver.driverApprovalStatus = "rejected";
+    driver.roles = driver.roles.filter((role) => role !== "driver");
     await driver.save();
     return res.status(HTTP_STATUS.OK).send(success("Driver rejected", driver));
   } catch (err) {
