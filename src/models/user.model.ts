@@ -41,6 +41,19 @@ const userSchema = new mongoose.Schema(
         longitude: { type: Number },
       },
     },
+    currentLocation: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+        required: true,
+      },
+      coordinates: {
+        type: [Number], // [longitude, latitude]
+        required: true,
+        default: [0, 0],
+      },
+    },
     address: {
       type: String,
     },
@@ -65,7 +78,7 @@ const userSchema = new mongoose.Schema(
 
     roles: {
       type: [String],
-      enum: ["user", "contributor", "admin", "superadmin"],
+      enum: ["user", "driver", "admin", "superadmin"],
       default: ["user"],
     },
 
@@ -142,5 +155,7 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+userSchema.index({ currentLocation: "2dsphere" });
 
 export default mongoose.model("User", userSchema);
