@@ -285,6 +285,50 @@ const getAllNotifications = async (req: Request, res: Response) => {
   }
 };
 
+const updateUserCurrentLocation = async (req: UserRequest, res: Response) => {
+  try {
+    if (!req.user || !req.user?._id) {
+      return res
+        .status(HTTP_STATUS.UNAUTHORIZED)
+        .send(failure("please login to update your location"));
+    }
+    const { longitude, latitude } = req.body;
+
+    if (!longitude || !latitude) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(failure("Longitude and latitude are required"));
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $set: {
+          currentLocation: {
+            type: "Point",
+            coordinates: [longitude, latitude],
+          },
+        },
+      },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(HTTP_STATUS.NOT_FOUND).send(failure("User not found"));
+    }
+
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(
+        success("Location updated", { currentLocation: user.currentLocation })
+      );
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Internal server error"));
+  }
+};
+
 export {
   getAllUsers,
   getOneUserById,
@@ -293,4 +337,5 @@ export {
   updateUserById,
   profile,
   updateProfileByUser,
+  updateUserCurrentLocation,
 };

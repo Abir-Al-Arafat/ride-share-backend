@@ -8,6 +8,7 @@ import {
   updateUserById,
   profile,
   updateProfileByUser,
+  updateUserCurrentLocation,
 } from "../controllers/users.controller";
 
 import {
@@ -37,5 +38,7 @@ routes.patch(
   fileUpload(),
   updateProfileByUser
 );
+
+routes.post("/update-location", isAuthorizedUser, updateUserCurrentLocation);
 
 export default routes;
