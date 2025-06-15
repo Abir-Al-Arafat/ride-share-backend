@@ -39,6 +39,6 @@ routes.patch(
   updateProfileByUser
 );
 
-routes.post("/update-location", isAuthorizedUser, updateUserCurrentLocation);
+routes.patch("/update-location", isAuthorizedUser, updateUserCurrentLocation);
 
 export default routes;
