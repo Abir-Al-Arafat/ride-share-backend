@@ -5,14 +5,12 @@ import {
   becomeADriver,
   approveDriver,
   rejectDriver,
-  login,
-  sendVerificationCodeToPhone,
-  sendOTP,
-  verifyEmail,
-  resetPassword,
-  changePassword,
 } from "../controllers/auth.controller";
-import { searchDrivers, requestRide } from "../controllers/driver.controller";
+import {
+  searchDrivers,
+  requestRide,
+  estimateRide,
+} from "../controllers/driver.controller";
 import multer from "multer";
 
 import {
@@ -71,40 +69,6 @@ routes.post(
   rejectDriver
 );
 
-routes.post(
-  "/send-verification-code-to-phone",
-  // userValidator.create,
-  // authValidator.create,
-  upload.none(),
-  sendVerificationCodeToPhone
-);
-
-routes.post(
-  "/verify-email",
-  // userValidator.create,
-  // authValidator.create,
-  upload.none(),
-  verifyEmail
-);
-
-routes.post(
-  "/send-otp",
-  // userValidator.create,
-  // authValidator.create,
-  upload.none(),
-  sendOTP
-);
-
-// for logging in
-routes.post("/login", upload.none(), login);
-
-routes.post("/reset-password", authValidator.resetPassword, resetPassword);
-
-routes.post(
-  "/change-password",
-  upload.none(),
-  isAuthorizedUser,
-  changePassword
-);
+routes.post("/estimate-ride", upload.none(), estimateRide);
 
 export default routes;
