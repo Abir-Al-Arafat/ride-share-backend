@@ -47,7 +47,7 @@ const notificationSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ["driver_application", "service", "forum", "others"],
+      enum: ["driver_application", "rideshare_service", "forum", "others"],
       default: "others",
     },
   },

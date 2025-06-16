@@ -103,7 +103,7 @@ const requestRide = async (req: Request, res: Response) => {
         passenger: userId,
         title: "New Ride Request",
         message: `A user requested a ride to ${destination}`,
-        type: "service",
+        type: "rideshare_service",
         uploader: driver._id,
       }))
     );
