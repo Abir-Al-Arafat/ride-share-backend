@@ -10,7 +10,9 @@ export interface IRequestedRide extends Document {
   pickupPlace: string;
   destination: string;
   passenger: ObjectId;
+  driver: ObjectId;
   availableDrivers: ObjectId[];
+  status: string;
 }
 
 const RequestedRideSchema = new Schema<IRequestedRide>(
@@ -25,6 +27,12 @@ const RequestedRideSchema = new Schema<IRequestedRide>(
     destination: { type: String },
     passenger: { type: Schema.Types.ObjectId, ref: "User" },
     availableDrivers: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    status: {
+      type: String,
+      enum: ["requested", "accepted", "in_progress", "completed", "cancelled"],
+      default: "requested",
+    },
+    driver: { type: Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );

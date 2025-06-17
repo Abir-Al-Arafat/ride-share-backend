@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import User from "../models/user.model";
 import Notification from "../models/notification.model";
+import RequestedRide from "../models/requestedRide.model";
 import { success, failure } from "../utilities/common";
 import HTTP_STATUS from "../constants/statusCodes";
 import { UserRequest } from "../interfaces/user.interface";
@@ -70,57 +71,6 @@ const searchDrivers = async (req: Request, res: Response) => {
   }
 };
 
-const requestRide = async (req: Request, res: Response) => {
-  try {
-    if (!(req as UserRequest)?.user || !(req as UserRequest).user?._id) {
-      return res
-        .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("please login to request a ride"));
-    }
-    const { latitude, longitude, destination, radius = 5000 } = req.body;
-    const userId = (req as UserRequest).user?._id;
-
-    // Find drivers as above
-    const drivers = await User.find({
-      driverApprovalStatus: "approved",
-      currentLocation: {
-        $near: {
-          $geometry: { type: "Point", coordinates: [longitude, latitude] },
-          $maxDistance: radius,
-        },
-      },
-    });
-
-    if (!drivers.length) {
-      return res
-        .status(HTTP_STATUS.NOT_FOUND)
-        .send(failure("No drivers found"));
-    }
-
-    // Notify drivers (create notifications)
-    const notifications = await Notification.insertMany(
-      drivers.map((driver) => ({
-        passenger: userId,
-        title: "New Ride Request",
-        message: `A user requested a ride to ${destination}`,
-        type: "rideshare_service",
-        uploader: driver._id,
-      }))
-    );
-
-    return res
-      .status(HTTP_STATUS.OK)
-      .send(
-        success("Ride request sent to drivers", { drivers, notifications })
-      );
-  } catch (err) {
-    console.log(err);
-    return res
-      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-      .send(failure("Internal server error"));
-  }
-};
-
 const estimateRide = async (req: Request, res: Response) => {
   try {
     const {
@@ -168,6 +118,118 @@ const estimateRide = async (req: Request, res: Response) => {
         estimatedFare: estimatedFare.toFixed(2),
         estimatedTimeMinutes: Math.ceil(estimatedTimeMinutes),
         distance: distance.toFixed(2),
+      })
+    );
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Internal server error"));
+  }
+};
+
+const requestRide = async (req: Request, res: Response) => {
+  try {
+    if (!(req as UserRequest).user || !(req as UserRequest).user!._id) {
+      return res
+        .status(HTTP_STATUS.UNAUTHORIZED)
+        .send(failure("Please login to request a ride"));
+    }
+    const {
+      estimatedFare,
+      estimatedTimeMinutes,
+      distance,
+      numberOfKids,
+      pickupLatitude,
+      pickupLongitude,
+      pickupPlace,
+      destination,
+    } = req.body;
+
+    const passenger = (req as UserRequest).user?._id;
+
+    if (
+      !estimatedFare ||
+      !estimatedTimeMinutes ||
+      !distance ||
+      !numberOfKids ||
+      !pickupLatitude ||
+      !pickupLongitude ||
+      !pickupPlace ||
+      !destination
+    ) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(
+          failure(
+            "estimatedFare, estimatedTimeMinutes, distance, numberOfKids, pickupLatitude, pickupLongitude, pickupPlace, destination are required"
+          )
+        );
+    }
+
+    // Find available drivers near the pickup location
+    const radius = 5000; // meters, or get from req.body if needed
+    const drivers = await User.find({
+      driverApprovalStatus: "approved",
+      currentLocation: {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [pickupLongitude, pickupLatitude],
+          },
+          $maxDistance: radius,
+        },
+      },
+    });
+
+    if (!drivers.length) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("No drivers found"));
+    }
+
+    // Create the requested ride
+    const requestedRide = await RequestedRide.create({
+      estimatedFare,
+      estimatedTimeMinutes,
+      distance,
+      numberOfKids,
+      pickupLatitude,
+      pickupLongitude,
+      pickupPlace,
+      destination,
+      passenger,
+      availableRiders: drivers.map((d) => d._id),
+    });
+
+    if (!requestedRide) {
+      return res
+        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+        .send(failure("Error creating requested ride"));
+    }
+
+    // Notify drivers
+    const notifications = await Notification.insertMany(
+      drivers.map((driver) => ({
+        passenger: passenger,
+        title: "New Ride Request",
+        message: `A user requested a ride to ${destination}`,
+        type: "rideshare_service",
+        driver: driver._id,
+        requestedRide: requestedRide._id,
+      }))
+    );
+
+    if (!notifications.length) {
+      return res
+        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+        .send(failure("Error creating notifications"));
+    }
+
+    return res.status(HTTP_STATUS.OK).send(
+      success("Ride request created and drivers notified", {
+        requestedRide,
+        drivers,
       })
     );
   } catch (err) {
