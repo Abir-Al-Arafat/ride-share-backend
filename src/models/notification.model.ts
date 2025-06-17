@@ -24,7 +24,10 @@ const notificationSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-
+    requestedRide: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "RequestedRide",
+    },
     status: {
       type: String,
       enum: ["pending", "approved", "cancelled"],
