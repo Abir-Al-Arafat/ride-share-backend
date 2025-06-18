@@ -154,6 +154,8 @@ const requestRide = async (req: Request, res: Response) => {
       pickupLongitude,
       pickupPlace,
       destination,
+      estimatedTimeFormatted,
+      estimatedTimeReadable,
     } = req.body;
 
     const passenger = (req as UserRequest).user?._id;
@@ -166,13 +168,15 @@ const requestRide = async (req: Request, res: Response) => {
       !pickupLatitude ||
       !pickupLongitude ||
       !pickupPlace ||
-      !destination
+      !destination ||
+      !estimatedTimeFormatted ||
+      !estimatedTimeReadable
     ) {
       return res
         .status(HTTP_STATUS.BAD_REQUEST)
         .send(
           failure(
-            "estimatedFare, estimatedTimeMinutes, distance, numberOfKids, pickupLatitude, pickupLongitude, pickupPlace, destination are required"
+            "estimatedFare, estimatedTimeMinutes, distance, numberOfKids, pickupLatitude, pickupLongitude, pickupPlace, destination, estimatedTimeFormatted, estimatedTimeReadable are required"
           )
         );
     }
@@ -204,6 +208,8 @@ const requestRide = async (req: Request, res: Response) => {
     const requestedRide = await RequestedRide.create({
       estimatedFare,
       estimatedTimeMinutes,
+      estimatedTimeFormatted,
+      estimatedTimeReadable,
       distance,
       numberOfKids,
       pickupLatitude,
