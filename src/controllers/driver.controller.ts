@@ -246,4 +246,85 @@ const requestRide = async (req: Request, res: Response) => {
   }
 };
 
-export { searchDrivers, requestRide, estimateRide };
+const findRequestedRidesForDriver = async (req: Request, res: Response) => {
+  try {
+    if (!(req as UserRequest).user || !(req as UserRequest).user!._id) {
+      return res
+        .status(HTTP_STATUS.UNAUTHORIZED)
+        .send(failure("Please login to find requested rides"));
+    }
+    console.log("roles ", (req as UserRequest).user?.roles!.includes("driver"));
+    console.log("roles ", (req as UserRequest).user?.roles!);
+    if (!(req as UserRequest).user?.roles!.includes("driver")) {
+      return res
+        .status(HTTP_STATUS.FORBIDDEN)
+        .send(failure("Only drivers can find requested rides"));
+    }
+
+    const { status } = req.query;
+
+    const driverId = (req as UserRequest).user?._id;
+
+    if (!driverId || !status) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(failure("driverId and status are required"));
+    }
+
+    const rides = await RequestedRide.find({
+      availableDrivers: driverId,
+      status: status,
+    });
+
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("Requested rides found", rides));
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Internal server error"));
+  }
+};
+
+const requestedRideById = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(failure("Requested ride ID is required"));
+    }
+
+    const requestedRide = await RequestedRide.findById(id)
+      .populate("passenger")
+      .populate("availableDrivers");
+
+    if (!requestedRide) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Requested ride not found"));
+    }
+
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("Requested ride found", requestedRide));
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Internal server error"));
+  }
+};
+
+export {
+  searchDrivers,
+  requestRide,
+  requestedRideById,
+  estimateRide,
+  findRequestedRidesForDriver,
+};
