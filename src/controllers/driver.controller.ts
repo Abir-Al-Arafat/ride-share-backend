@@ -4,28 +4,31 @@ import Notification from "../models/notification.model";
 import RequestedRide from "../models/requestedRide.model";
 import { success, failure } from "../utilities/common";
 import HTTP_STATUS from "../constants/statusCodes";
-import { UserRequest } from "../interfaces/user.interface";
+import { IUser, UserRequest } from "../interfaces/user.interface";
+import mongoose from "mongoose";
+import formatMinutesSeconds from "../utilities/timeFormatter";
+import { haversineDistance } from "../utilities/distance";
 
 // Helper to calculate distance between two lat/lng points in kilometers
-function haversineDistance(
-  lat1: number,
-  lon1: number,
-  lat2: number,
-  lon2: number
-): number {
-  const toRad = (x: number) => (x * Math.PI) / 180;
-  const R = 6371; // Earth's radius in km
-  const dLat = toRad(lat2 - lat1);
-  const dLon = toRad(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRad(lat1)) *
-      Math.cos(toRad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-}
+// function haversineDistance(
+//   lat1: number,
+//   lon1: number,
+//   lat2: number,
+//   lon2: number
+// ): number {
+//   const toRad = (x: number) => (x * Math.PI) / 180;
+//   const R = 6371; // Earth's radius in km
+//   const dLat = toRad(lat2 - lat1);
+//   const dLon = toRad(lon2 - lon1);
+//   const a =
+//     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+//     Math.cos(toRad(lat1)) *
+//       Math.cos(toRad(lat2)) *
+//       Math.sin(dLon / 2) *
+//       Math.sin(dLon / 2);
+//   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+//   return R * c;
+// }
 
 const searchDrivers = async (req: Request, res: Response) => {
   try {
@@ -111,12 +114,20 @@ const estimateRide = async (req: Request, res: Response) => {
 
     // Estimated time (assuming average speed 30km/h)
     const averageSpeed = 30; // km/h
-    const estimatedTimeMinutes = (distance / averageSpeed) * 60;
+
+    const estimatedTime = (distance / averageSpeed) * 60; // in minutes (float)
+
+    const {
+      formatted: estimatedTimeFormatted,
+      readable: estimatedTimeReadable,
+    } = formatMinutesSeconds(estimatedTime);
 
     return res.status(HTTP_STATUS.OK).send(
       success("Estimate calculated", {
         estimatedFare: estimatedFare.toFixed(2),
-        estimatedTimeMinutes: Math.ceil(estimatedTimeMinutes),
+        estimatedTimeMinutes: Math.ceil(estimatedTime),
+        estimatedTimeFormatted, // "1:30"
+        estimatedTimeReadable,
         distance: distance.toFixed(2),
       })
     );
@@ -321,10 +332,115 @@ const requestedRideById = async (
   }
 };
 
+const acceptRideRequestByDriver = async (req: UserRequest, res: Response) => {
+  try {
+    if (!(req as UserRequest).user || !(req as UserRequest).user!._id) {
+      return res
+        .status(HTTP_STATUS.UNAUTHORIZED)
+        .send(failure("Please login to find requested rides"));
+    }
+    const { requestedRideId } = req.params;
+    const driverId = req.user?._id;
+
+    if (!requestedRideId || !driverId) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(failure("requestedRideId required"));
+    }
+
+    // Find the requested ride and populate passenger
+    const ride = await RequestedRide.findById(requestedRideId)
+      .populate("passenger")
+      .select("-createdAt -updatedAt -__v -availableDrivers");
+
+    if (!ride) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Requested ride not found"));
+    }
+
+    // if (ride.status === "accepted") {
+    //   return res
+    //     .status(HTTP_STATUS.BAD_REQUEST)
+    //     .send(failure("Ride has already been accepted"));
+    // }
+
+    // Find driver and passenger locations
+    const driver = await User.findById(driverId);
+    const passenger = ride.passenger as any;
+
+    if (!driver?.currentLocation?.coordinates) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(failure("Location data missing for driver "));
+    }
+    if (!passenger?.currentLocation?.coordinates) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(failure("Location data missing for passenger"));
+    }
+    const [driverLng, driverLat] = driver.currentLocation.coordinates;
+    const [passengerLng, passengerLat] = passenger.currentLocation.coordinates;
+
+    // Calculate distance in km
+    const distance = haversineDistance(
+      driverLat,
+      driverLng,
+      passengerLat,
+      passengerLng
+    );
+
+    // Estimate time (assuming average speed 30km/h)
+    const averageSpeed = 30; // km/h
+
+    const estimatedTime = (distance / averageSpeed) * 60; // in minutes (float)
+    const minutes = Math.floor(estimatedTime);
+    const seconds = Math.round((estimatedTime - minutes) * 60);
+
+    const estimatedTimeFormatted = `${minutes}:${seconds
+      .toString()
+      .padStart(2, "0")}`; // e.g., "1:30"
+    const estimatedTimeReadable = `${minutes} minute${
+      minutes !== 1 ? "s" : ""
+    }${seconds > 0 ? ` ${seconds} second${seconds !== 1 ? "s" : ""}` : ""}`; // e.g., "1 minute 30 seconds"
+
+    // Update ride status to accepted and save driver info if needed
+    ride.status = "accepted";
+    ride.driver = driverId; // If you want to track which driver accepted
+    await ride.save();
+
+    // const notification = await Notification.create({
+    //   passenger: passenger._id,
+    //   driver: driver._id,
+    //   title: "Ride accepted",
+    //   message: "Your ride has been accepted by a driver",
+    // });
+
+    return res.status(HTTP_STATUS.OK).send(
+      success("Ride accepted", {
+        ride,
+        passenger,
+        driverLocation: driver.currentLocation,
+        passengerLocation: passenger.currentLocation,
+        distance: distance.toFixed(2),
+        estimatedTimeMinutes: Math.ceil(estimatedTime),
+        estimatedTimeFormatted, // "1:30"
+        estimatedTimeReadable,
+      })
+    );
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Internal server error"));
+  }
+};
+
 export {
   searchDrivers,
   requestRide,
   requestedRideById,
+  acceptRideRequestByDriver,
   estimateRide,
   findRequestedRidesForDriver,
 };

@@ -12,6 +12,7 @@ import {
   estimateRide,
   findRequestedRidesForDriver,
   requestedRideById,
+  acceptRideRequestByDriver,
 } from "../controllers/driver.controller";
 import multer from "multer";
 
@@ -81,5 +82,12 @@ routes.get(
 );
 
 routes.get("/requested-ride/:id", upload.none(), requestedRideById);
+
+routes.post(
+  "/accept-ride-request-by-driver/:requestedRideId",
+  upload.none(),
+  isAuthorizedUser,
+  acceptRideRequestByDriver
+);
 
 export default routes;
