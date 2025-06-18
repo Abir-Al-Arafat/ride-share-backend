@@ -13,6 +13,8 @@ export interface IRequestedRide extends Document {
   driver: ObjectId;
   availableDrivers: ObjectId[];
   status: string;
+  estimatedTimeFormatted: string;
+  estimatedTimeReadable: string;
 }
 
 const RequestedRideSchema = new Schema<IRequestedRide>(
@@ -25,6 +27,8 @@ const RequestedRideSchema = new Schema<IRequestedRide>(
     pickupLongitude: { type: Number },
     pickupPlace: { type: String },
     destination: { type: String },
+    estimatedTimeFormatted: { type: String },
+    estimatedTimeReadable: { type: String },
     passenger: { type: Schema.Types.ObjectId, ref: "User" },
     availableDrivers: [{ type: Schema.Types.ObjectId, ref: "User" }],
     status: {
