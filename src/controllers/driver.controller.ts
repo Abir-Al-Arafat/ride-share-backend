@@ -5,7 +5,6 @@ import RequestedRide from "../models/requestedRide.model";
 import { success, failure } from "../utilities/common";
 import HTTP_STATUS from "../constants/statusCodes";
 import { IUser, UserRequest } from "../interfaces/user.interface";
-import mongoose from "mongoose";
 import formatMinutesSeconds from "../utilities/timeFormatter";
 import { haversineDistance } from "../utilities/distance";
 
