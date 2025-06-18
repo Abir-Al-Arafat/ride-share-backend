@@ -187,7 +187,9 @@ const requestRide = async (req: Request, res: Response) => {
         .status(HTTP_STATUS.NOT_FOUND)
         .send(failure("No drivers found"));
     }
+    const driverIds = drivers.map((driver) => driver._id);
 
+    console.log("driverIds", driverIds);
     // Create the requested ride
     const requestedRide = await RequestedRide.create({
       estimatedFare,
@@ -199,8 +201,10 @@ const requestRide = async (req: Request, res: Response) => {
       pickupPlace,
       destination,
       passenger,
-      availableRiders: drivers.map((d) => d._id),
+      availableDrivers: driverIds,
     });
+
+    console.log("requestedRide", requestedRide);
 
     if (!requestedRide) {
       return res
@@ -219,6 +223,8 @@ const requestRide = async (req: Request, res: Response) => {
         requestedRide: requestedRide._id,
       }))
     );
+
+    console.log("notifications", notifications);
 
     if (!notifications.length) {
       return res
