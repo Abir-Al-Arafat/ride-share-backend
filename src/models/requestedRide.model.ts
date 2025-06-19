@@ -1,21 +1,21 @@
 import mongoose, { Schema, Document, ObjectId } from "mongoose";
-
-export interface IRequestedRide extends Document {
-  estimatedFare: number;
-  estimatedTimeMinutes: number;
-  distance: number;
-  numberOfKids: number;
-  pickupLatitude: number;
-  pickupLongitude: number;
-  pickupPlace: string;
-  destination: string;
-  passenger: ObjectId;
-  driver: ObjectId;
-  availableDrivers: ObjectId[];
-  status: string;
-  estimatedTimeFormatted: string;
-  estimatedTimeReadable: string;
-}
+import IRequestedRide from "../interfaces/requestedRide.interface";
+// export interface IRequestedRide extends Document {
+//   estimatedFare: number;
+//   estimatedTimeMinutes: number;
+//   distance: number;
+//   numberOfKids: number;
+//   pickupLatitude: number;
+//   pickupLongitude: number;
+//   pickupPlace: string;
+//   destination: string;
+//   passenger: ObjectId;
+//   driver: ObjectId;
+//   availableDrivers: ObjectId[];
+//   status: string;
+//   estimatedTimeFormatted: string;
+//   estimatedTimeReadable: string;
+// }
 
 const RequestedRideSchema = new Schema<IRequestedRide>(
   {
@@ -36,7 +36,7 @@ const RequestedRideSchema = new Schema<IRequestedRide>(
       enum: [
         "requested",
         "accepted",
-        "arrived",
+        "arrivedAtPickup",
         "in_progress",
         "completed",
         "cancelled",
