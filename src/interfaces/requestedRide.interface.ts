@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, ObjectId } from "mongoose";
+import { Document, ObjectId } from "mongoose";
 export default interface IRequestedRide extends Document {
   estimatedFare: number;
   estimatedTimeMinutes: number;
