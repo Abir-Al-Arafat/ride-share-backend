@@ -14,4 +14,5 @@ export default interface IRequestedRide extends Document {
   status: string;
   estimatedTimeFormatted: string;
   estimatedTimeReadable: string;
+  otp: Number;
 }

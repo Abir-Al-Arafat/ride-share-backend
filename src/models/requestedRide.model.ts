@@ -44,6 +44,7 @@ const RequestedRideSchema = new Schema<IRequestedRide>(
       default: "requested",
     },
     driver: { type: Schema.Types.ObjectId, ref: "User" },
+    otp: { type: Number },
   },
   { timestamps: true }
 );
