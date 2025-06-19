@@ -523,4 +523,7 @@ export {
   acceptRideRequestByDriver,
   estimateRide,
   findRequestedRidesForDriver,
+  arrivedAtPickup,
+  startRide,
+  completeRide,
 };
