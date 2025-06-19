@@ -33,7 +33,14 @@ const RequestedRideSchema = new Schema<IRequestedRide>(
     availableDrivers: [{ type: Schema.Types.ObjectId, ref: "User" }],
     status: {
       type: String,
-      enum: ["requested", "accepted", "in_progress", "completed", "cancelled"],
+      enum: [
+        "requested",
+        "accepted",
+        "arrived",
+        "in_progress",
+        "completed",
+        "cancelled",
+      ],
       default: "requested",
     },
     driver: { type: Schema.Types.ObjectId, ref: "User" },
