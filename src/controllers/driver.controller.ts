@@ -441,6 +441,81 @@ const acceptRideRequestByDriver = async (req: UserRequest, res: Response) => {
   }
 };
 
+const arrivedAtPickup = async (
+  req: UserRequest,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { id } = req.params;
+    const requestedRide = await RequestedRide.findById(id);
+    if (!requestedRide) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Requested ride not found"));
+    }
+    requestedRide.status = "arrivedAtPickup";
+    await requestedRide.save();
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("Requested ride updated", requestedRide));
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Internal server error"));
+  }
+};
+
+const startRide = async (
+  req: UserRequest,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { id } = req.params;
+    const requestedRide = await RequestedRide.findById(id);
+    if (!requestedRide) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Requested ride not found"));
+    }
+    requestedRide.status = "in_progress";
+    await requestedRide.save();
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("Requested ride updated", requestedRide));
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Internal server error"));
+  }
+};
+
+const completeRide = async (
+  req: UserRequest,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { id } = req.params;
+    const requestedRide = await RequestedRide.findById(id);
+    if (!requestedRide) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Requested ride not found"));
+    }
+    requestedRide.status = "completed";
+    await requestedRide.save();
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("Requested ride updated", requestedRide));
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Internal server error"));
+  }
+};
+
 export {
   searchDrivers,
   requestRide,
