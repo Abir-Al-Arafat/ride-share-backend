@@ -119,6 +119,7 @@ const estimateRide = async (req: Request, res: Response) => {
     const {
       formatted: estimatedTimeFormatted,
       readable: estimatedTimeReadable,
+      milliseconds: estimatedTimeMilliseconds,
     } = formatMinutesSeconds(estimatedTime);
 
     return res.status(HTTP_STATUS.OK).send(
@@ -127,6 +128,7 @@ const estimateRide = async (req: Request, res: Response) => {
         estimatedTimeMinutes: Math.ceil(estimatedTime),
         estimatedTimeFormatted, // "1:30"
         estimatedTimeReadable,
+        estimatedTimeMilliseconds, // e.g., 90000
         distance: distance.toFixed(2),
       })
     );
