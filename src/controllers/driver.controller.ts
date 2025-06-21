@@ -604,15 +604,16 @@ const getOverview = async (
     }
 
     const { startDate, endDate } = getTodayRange();
+    const driverId = (req as UserRequest).user!._id;
 
-    const completedRides = await RequestedRide.find({
-      driver: (req as UserRequest).user!._id,
+    const completedRides = await RequestedRide.countDocuments({
+      driver: driverId,
       status: "completed",
       createdAt: { $gte: startDate, $lte: endDate },
     });
 
-    const cancelledRides = await RequestedRide.find({
-      driver: (req as UserRequest).user!._id,
+    const cancelledRides = await RequestedRide.countDocuments({
+      driver: driverId,
       status: "cancelled",
       createdAt: { $gte: startDate, $lte: endDate },
     });
