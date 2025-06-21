@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import HTTP_STATUS from "../constants/statusCodes";
-import { success, failure, generateRandomCode } from "../utilities/common";
+import { success, failure } from "../utilities/common";
 import Review from "../models/review.model";
 import IReview from "../interfaces/review.interface";
 import { UserRequest } from "../interfaces/user.interface";
