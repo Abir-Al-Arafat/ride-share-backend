@@ -632,9 +632,27 @@ const getOverview = async (
   }
 };
 
+const getAllRequestedRides = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const requestedRides = await RequestedRide.find({});
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("Requested rides found", requestedRides));
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Internal server error"));
+  }
+};
+
 export {
   searchDrivers,
   requestRide,
+  getAllRequestedRides,
   requestedRideById,
   acceptRideRequestByDriver,
   estimateRide,

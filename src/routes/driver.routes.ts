@@ -14,6 +14,7 @@ import {
   requestedRideById,
   acceptRideRequestByDriver,
   getOverview,
+  getAllRequestedRides,
 } from "../controllers/driver.controller";
 import multer from "multer";
 
@@ -81,6 +82,8 @@ routes.get(
   isAuthorizedUser,
   findRequestedRidesForDriver
 );
+
+routes.get("/get-all-requested-rides", getAllRequestedRides);
 
 routes.get("/requested-ride/:id", upload.none(), requestedRideById);
 
