@@ -547,6 +547,50 @@ const completeRide = async (
   }
 };
 
+const verifyOTPOnRideCompletion = async (
+  req: UserRequest,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { id } = req.params;
+    const { otp } = req.body;
+
+    if (!otp) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(failure("Please provide otp"));
+    }
+
+    const requestedRide: any = await RequestedRide.findById(id);
+    if (!requestedRide) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Requested ride not found"));
+    }
+
+    if (!requestedRide.otp) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(failure("OTP not generated for this ride"));
+    }
+
+    if (requestedRide.otp !== otp) {
+      return res.status(HTTP_STATUS.BAD_REQUEST).send(failure("Invalid OTP"));
+    }
+
+    requestedRide.status = "completed";
+    await requestedRide.save();
+    return res
+      .status(HTTP_STATUS.OK)
+      .send(success("Requested ride updated", requestedRide));
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Internal server error"));
+  }
+};
+
 export {
   searchDrivers,
   requestRide,
@@ -557,4 +601,5 @@ export {
   arrivedAtPickup,
   startRide,
   completeRide,
+  verifyOTPOnRideCompletion,
 };
