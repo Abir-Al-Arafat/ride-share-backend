@@ -497,10 +497,10 @@ const completeRide = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const { id } = req.params;
-    const requestedRide: any = await RequestedRide.findById(id).populate(
-      "passenger"
-    );
+    const { requestedRideId } = req.params;
+    const requestedRide: any = await RequestedRide.findById(
+      requestedRideId
+    ).populate("passenger");
     if (!requestedRide) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
