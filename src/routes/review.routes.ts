@@ -9,11 +9,6 @@ import {
 import multer from "multer";
 
 import {
-  userValidator,
-  authValidator,
-  driverValidator,
-} from "../middlewares/validation";
-import {
   isAuthorizedUser,
   isAuthorizedAdmin,
   isAuthorizedSuperAdmin,
