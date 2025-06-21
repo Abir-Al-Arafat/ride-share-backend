@@ -8,6 +8,7 @@ import { IUser, UserRequest } from "../interfaces/user.interface";
 import formatMinutesSeconds from "../utilities/timeFormatter";
 import { haversineDistance } from "../utilities/distance";
 import { emailWithNodemailerGmail } from "../config/email.config";
+import { getTodayRange } from "../utilities/range";
 
 // Helper to calculate distance between two lat/lng points in kilometers
 // function haversineDistance(
@@ -591,6 +592,45 @@ const verifyOTPOnRideCompletion = async (
   }
 };
 
+const getOverview = async (
+  req: UserRequest,
+  res: Response
+): Promise<Response> => {
+  try {
+    if (!(req as UserRequest).user || !(req as UserRequest).user!._id) {
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .send(failure("User not logged in"));
+    }
+
+    const { startDate, endDate } = getTodayRange();
+
+    const completedRides = await RequestedRide.find({
+      driver: (req as UserRequest).user!._id,
+      status: "completed",
+      createdAt: { $gte: startDate, $lte: endDate },
+    });
+
+    const cancelledRides = await RequestedRide.find({
+      driver: (req as UserRequest).user!._id,
+      status: "cancelled",
+      createdAt: { $gte: startDate, $lte: endDate },
+    });
+
+    return res.status(HTTP_STATUS.OK).send(
+      success("Requested ride found", {
+        completedRides,
+        cancelledRides,
+      })
+    );
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .send(failure("Internal server error"));
+  }
+};
+
 export {
   searchDrivers,
   requestRide,
@@ -602,4 +642,5 @@ export {
   startRide,
   completeRide,
   verifyOTPOnRideCompletion,
+  getOverview,
 };
