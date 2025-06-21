@@ -403,17 +403,13 @@ const acceptRideRequestByDriver = async (req: UserRequest, res: Response) => {
     const averageSpeed = 30; // km/h
 
     const estimatedTime = (distance / averageSpeed) * 60; // in minutes (float)
-    const minutes = Math.floor(estimatedTime);
-    const seconds = Math.round((estimatedTime - minutes) * 60);
 
-    const estimatedTimeFormatted = `${minutes}:${seconds
-      .toString()
-      .padStart(2, "0")}`; // e.g., "1:30"
-    const estimatedTimeReadable = `${minutes} minute${
-      minutes !== 1 ? "s" : ""
-    }${seconds > 0 ? ` ${seconds} second${seconds !== 1 ? "s" : ""}` : ""}`; // e.g., "1 minute 30 seconds"
+    const {
+      formatted: estimatedTimeFormatted,
+      readable: estimatedTimeReadable,
+      milliseconds: estimatedTimeMilliseconds,
+    } = formatMinutesSeconds(estimatedTime);
 
-    // Update ride status to accepted and save driver info if needed
     ride.status = "accepted";
     ride.driver = driverId; // If you want to track which driver accepted
     await ride.save();
@@ -435,6 +431,7 @@ const acceptRideRequestByDriver = async (req: UserRequest, res: Response) => {
         estimatedTimeMinutes: Math.ceil(estimatedTime),
         estimatedTimeFormatted, // "1:30"
         estimatedTimeReadable,
+        estimatedTimeMilliseconds, // e.g., 90000
       })
     );
   } catch (err) {
