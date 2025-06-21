@@ -14,6 +14,7 @@ import {
   requestedRideById,
   acceptRideRequestByDriver,
   arrivedAtPickup,
+  startRide,
   getOverview,
   getAllRequestedRides,
 } from "../controllers/driver.controller";
@@ -100,6 +101,13 @@ routes.post(
   // upload.none(),
   // isAuthorizedUser,
   arrivedAtPickup
+);
+
+routes.post(
+  "/start-ride/:requestedRideId",
+  // upload.none(),
+  // isAuthorizedUser,
+  startRide
 );
 
 routes.get("/get-overview", upload.none(), isAuthorizedUser, getOverview);

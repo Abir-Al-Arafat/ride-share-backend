@@ -447,8 +447,8 @@ const arrivedAtPickup = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const { id } = req.params;
-    const requestedRide = await RequestedRide.findById(id);
+    const { requestedRideId } = req.params;
+    const requestedRide = await RequestedRide.findById(requestedRideId);
     if (!requestedRide) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
@@ -472,8 +472,8 @@ const startRide = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const { id } = req.params;
-    const requestedRide = await RequestedRide.findById(id);
+    const { requestedRideId } = req.params;
+    const requestedRide = await RequestedRide.findById(requestedRideId);
     if (!requestedRide) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
