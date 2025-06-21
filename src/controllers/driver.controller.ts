@@ -2,11 +2,12 @@ import { Request, Response } from "express";
 import User from "../models/user.model";
 import Notification from "../models/notification.model";
 import RequestedRide from "../models/requestedRide.model";
-import { success, failure } from "../utilities/common";
+import { success, failure, generateRandomCode } from "../utilities/common";
 import HTTP_STATUS from "../constants/statusCodes";
 import { IUser, UserRequest } from "../interfaces/user.interface";
 import formatMinutesSeconds from "../utilities/timeFormatter";
 import { haversineDistance } from "../utilities/distance";
+import { emailWithNodemailerGmail } from "../config/email.config";
 
 // Helper to calculate distance between two lat/lng points in kilometers
 // function haversineDistance(
@@ -499,12 +500,40 @@ const completeRide = async (
 ): Promise<Response> => {
   try {
     const { id } = req.params;
-    const requestedRide = await RequestedRide.findById(id);
+    const requestedRide: any = await RequestedRide.findById(id).populate(
+      "passenger"
+    );
     if (!requestedRide) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
         .send(failure("Requested ride not found"));
     }
+    if (!requestedRide.passenger || !requestedRide.passenger.email) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("Passenger not found for requested ride "));
+    }
+
+    const otp = generateRandomCode(4);
+    requestedRide.otp = otp; // Store OTP in the ride
+
+    const emailData = {
+      email: requestedRide.passenger.email,
+      subject: "OTP Verification",
+      html: `
+                    <h6>Hello, ${
+                      requestedRide.passenger.email ||
+                      requestedRide.passenger.username ||
+                      requestedRide.passenger.name ||
+                      "User"
+                    }</h6>
+                    <p>Your OTP is <h6>${otp}</h6> provide this to driver</p>
+                    
+                  `,
+    };
+
+    emailWithNodemailerGmail(emailData);
+
     requestedRide.status = "completed";
     await requestedRide.save();
     return res
