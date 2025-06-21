@@ -147,6 +147,8 @@ const userSchema = new mongoose.Schema(
     },
 
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
+    reviewGiven: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
+    reviewReceived: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
   },
   { timestamps: true }
 );
