@@ -3,17 +3,25 @@ import Chat from "../models/chat.model";
 import User from "../models/user.model";
 import { success, failure } from "../utilities/common";
 import HTTP_STATUS from "../constants/statusCodes";
+import { UserRequest } from "../interfaces/user.interface";
 
 // create/fetch 1 on 1 chat
-const accessChat = async (req: Request, res: Response) => {
+const accessChat = async (req: UserRequest, res: Response) => {
   try {
-    const { userId } = req.body;
-    const loggedInUserId = req.params.id;
+    if (!(req as UserRequest).user || !(req as UserRequest).user!._id) {
+      return res
+        .status(HTTP_STATUS.UNAUTHORIZED)
+        .send(failure("Please login to create/access chat"));
+    }
+
+    const { userId } = req.body; // the userId of the person you want to chat with
     if (!userId) {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
         .send(failure("Please provide user id you want to connect with"));
     }
+    const loggedInUserId = (req as UserRequest).user!._id;
+
     let isChat = await Chat.find({
       //   isGroupChat: false,
       $and: [
@@ -34,7 +42,6 @@ const accessChat = async (req: Request, res: Response) => {
 
     const chatData = {
       chatName: "sender",
-      //   users: [req.user._id, userId],
       users: [loggedInUserId, userId],
     };
 
@@ -52,9 +59,15 @@ const accessChat = async (req: Request, res: Response) => {
   }
 };
 
+// fetch all chats of a particular user
 const fetchChats = async (req: Request, res: Response) => {
   try {
-    const loggedInUserId = req.params.id;
+    if (!(req as UserRequest).user || !(req as UserRequest).user!._id) {
+      return res
+        .status(HTTP_STATUS.UNAUTHORIZED)
+        .send(failure("Please login to fetch your chats"));
+    }
+    const loggedInUserId = (req as UserRequest).user!._id;
     // Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
     // Chat.find({ users: { $elemMatch: { $eq: loggedInUserId } } })
     //   .populate("users", "-password")

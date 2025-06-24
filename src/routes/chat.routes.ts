@@ -23,8 +23,18 @@ routes.post(
   "/access",
   // userValidator.create,
   // authValidator.create,
+  isAuthorizedUser,
   upload.none(),
   accessChat
+);
+
+routes.get(
+  "/fetch",
+  // userValidator.create,
+  // authValidator.create,
+  isAuthorizedUser,
+  upload.none(),
+  fetchChats
 );
 
 export default routes;
