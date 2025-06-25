@@ -12,6 +12,7 @@ import serviceRouter from "./routes/service.routes";
 import driverRouter from "./routes/driver.routes";
 import rideRouter from "./routes/ride.routes";
 import chatRouter from "./routes/chat.routes";
+import messageRouter from "./routes/message.routes";
 
 const app = express();
 dotenv.config();
@@ -52,6 +53,7 @@ app.use(`${baseApiUrl}/services`, serviceRouter);
 app.use(`${baseApiUrl}/drivers`, driverRouter);
 app.use(`${baseApiUrl}/rides`, rideRouter);
 app.use(`${baseApiUrl}/chats`, chatRouter);
+app.use(`${baseApiUrl}/messages`, messageRouter);
 
 app.get("/", (req, res) => {
   return res.status(200).send({
