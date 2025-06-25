@@ -58,7 +58,8 @@ const fetchAllMessages = async (req: Request, res: Response) => {
     }
     const messages = await Message.find({ chat: chatId })
       .populate("sender", "name image email")
-      .populate("chat");
+      .populate("chat")
+      .sort({ createdAt: -1 });
     return res
       .status(HTTP_STATUS.OK)
       .send(success("Messages fetched successfully", messages));
