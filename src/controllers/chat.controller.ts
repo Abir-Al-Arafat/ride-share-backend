@@ -30,7 +30,7 @@ const accessChat = async (req: UserRequest, res: Response) => {
         { users: { $elemMatch: { $eq: userId } } },
       ],
     })
-      .populate("users", "-password")
+      .populate("users", "email image currentLocation roles username name")
       .populate("latestMessage");
 
     isChat = await Chat.populate(isChat, {
@@ -46,10 +46,11 @@ const accessChat = async (req: UserRequest, res: Response) => {
     };
 
     const createdChat = await Chat.create(chatData);
-    const fullChat = await Chat.findOne({ _id: createdChat._id }).populate(
+    const fullChat: any = await Chat.findOne({ _id: createdChat._id }).populate(
       "users",
-      "-password"
+      "email image currentLocation roles username name"
     );
+
     res.status(HTTP_STATUS.OK).send(success("Chat created", fullChat));
   } catch (error) {
     console.log(error);
