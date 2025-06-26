@@ -94,7 +94,73 @@ const io = new SocketIOServer(httpServer, {
 // Socket.IO connection handler
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
-  console.log("A user connected:", socket);
+
+  // chat steps:
+  // 1. create room
+  socket.on("setup", (userData) => {
+    try {
+      let parsedUserData = userData;
+      if (typeof userData !== "object") {
+        try {
+          parsedUserData = JSON.parse(userData);
+        } catch (parseErr) {
+          console.error("Error parsing user data:", parseErr);
+          // Send error response to client
+          socket.emit("setup_error", { message: "Invalid user data format." });
+          return;
+        }
+      }
+
+      if (
+        typeof parsedUserData !== "object" ||
+        parsedUserData === null ||
+        !parsedUserData._id
+      ) {
+        console.error("Invalid user data:", parsedUserData);
+        // Send error response to client
+        socket.emit("setup_error", { message: "User data must have an _id." });
+        return;
+      }
+      // create room based on user ID
+      socket.join(parsedUserData._id);
+      socket.emit("connected", { message: "room created." }); // Success response
+      console.log("User setup complete:", parsedUserData._id);
+      console.log("User setup complete:", parsedUserData);
+    } catch (error) {
+      socket.emit("setup_error", { message: "Internal server error." });
+    }
+  });
+  // 2. join room (param: room id / chatId)
+  socket.on("join chat", (room) => {
+    socket.join(room); // Join the user to the room id
+    console.log("User joined room:", room);
+  });
+
+  // 3. get message and send to rooms
+  socket.on("new message", (newMessage) => {
+    const { chatId, content, sender, users } = newMessage;
+    console.log("New message received:", newMessage);
+    if (!users)
+      return console.error("Users array is required in new message event");
+    interface User {
+      _id: string;
+      [key: string]: any;
+    }
+
+    interface Message {
+      chatId: string;
+      content: string;
+      sender: User;
+      users: User[];
+      [key: string]: any;
+    }
+
+    (users as User[]).forEach((user: User) => {
+      if (user._id == (newMessage as Message).sender._id) return; // Skip sending to self
+      socket.in(user._id).emit("message received", newMessage);
+    });
+    // io.to(chatId).emit("message received", { chatId, content, sender }); // Broadcast to all clients (or use socket.to(room).emit for rooms)
+  });
 
   // Example event
   socket.on("sendMessage", (data) => {
@@ -113,3 +179,5 @@ databaseConnection(() => {
     console.log(`Server running on port ${PORT}`);
   });
 });
+
+// export { io }; // Export if you want to use io elsewhere
