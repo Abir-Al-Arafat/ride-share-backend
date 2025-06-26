@@ -5,6 +5,9 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { Request, Response, NextFunction } from "express";
 import passport from "passport";
+// import io from "socket.io";
+import http from "http";
+import { Server as SocketIOServer } from "socket.io";
 import databaseConnection from "./config/database";
 import userRouter from "./routes/user.routes";
 import authRouter from "./routes/auth.routes";
@@ -78,8 +81,35 @@ app.use((err: SyntaxError, req: Request, res: Response, next: NextFunction) => {
 
 const PORT = process.env.PORT || 3001;
 
+// Create HTTP server and attach Socket.IO
+const httpServer = http.createServer(app);
+const io = new SocketIOServer(httpServer, {
+  cors: {
+    origin: "*", // Adjust as needed for production
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
+// Socket.IO connection handler
+io.on("connection", (socket) => {
+  console.log("A user connected:", socket.id);
+  console.log("A user connected:", socket);
+
+  // Example event
+  socket.on("sendMessage", (data) => {
+    // Broadcast to all clients (or use socket.to(room).emit for rooms)
+    console.log("Message received:", data);
+    io.emit("receiveMessage", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+  });
+});
+
 databaseConnection(() => {
-  app.listen(PORT, () => {
+  httpServer.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
 });
