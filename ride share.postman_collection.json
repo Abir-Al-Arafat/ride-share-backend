@@ -1,0 +1,2011 @@
+{
+	"info": {
+		"_postman_id": "dde22fa8-c2e9-4ee7-a1ca-932003cb41ae",
+		"name": "ride share",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43894920",
+		"_collection_link": "https://kidsrideshare.postman.co/workspace/Team-Workspace~689d5508-62af-44b7-89d9-efabc1ca1f1d/collection/43894920-dde22fa8-c2e9-4ee7-a1ca-932003cb41ae?action=share&source=collection_link&creator=43894920"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "kikoj79757@forcrack.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "kikoj79757@forcrack.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/signup",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "become a driver",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM2YjI4NTJiYjQxMGM3ZDA2YzFmYmIiLCJyb2xlcyI6WyJ1c2VyIl0sImlhdCI6MTc0ODQxNTIxMCwiZXhwIjoxODM0ODE1MjEwfQ.hq4VpST9lOPGLd7LDPUSwPJl-3w34Xov7aMzxvyKQ_A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "cewofe",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "+8801999999999",
+									"type": "text"
+								},
+								{
+									"key": "carModel",
+									"value": "1126",
+									"type": "text"
+								},
+								{
+									"key": "manufactureYear",
+									"value": "2000",
+									"type": "text"
+								},
+								{
+									"key": "vin",
+									"value": "78973284235",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "oklahoma",
+									"type": "text"
+								},
+								{
+									"key": "drivingCity",
+									"value": "californai",
+									"type": "text"
+								},
+								{
+									"key": "passportIdFront",
+									"type": "file",
+									"src": "/C:/Users/ABIR/Downloads/NID/front.jpg"
+								},
+								{
+									"key": "passportIdBack",
+									"type": "file",
+									"src": "/C:/Users/ABIR/Downloads/NID/back.jpg"
+								},
+								{
+									"key": "drivingLicenseFront",
+									"type": "file",
+									"src": "/C:/Users/ABIR/Downloads/NID/front.jpg"
+								},
+								{
+									"key": "drivingLicenseBack",
+									"type": "file",
+									"src": "/C:/Users/ABIR/Downloads/NID/back.jpg"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/ABIR/Downloads/NID/Smart_NID_Card.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/become-a-driver",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"become-a-driver"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "approve driver",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM2YjI4NTJiYjQxMGM3ZDA2YzFmYmIiLCJyb2xlcyI6WyJ1c2VyIl0sImlhdCI6MTc0ODQxNTIxMCwiZXhwIjoxODM0ODE1MjEwfQ.hq4VpST9lOPGLd7LDPUSwPJl-3w34Xov7aMzxvyKQ_A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "driverId",
+									"value": "6836b2852bb410c7d06c1fbb",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/approve-driver",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"approve-driver"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reject driver",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM2YjI4NTJiYjQxMGM3ZDA2YzFmYmIiLCJyb2xlcyI6WyJ1c2VyIl0sImlhdCI6MTc0ODQxNTIxMCwiZXhwIjoxODM0ODE1MjEwfQ.hq4VpST9lOPGLd7LDPUSwPJl-3w34Xov7aMzxvyKQ_A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "driverId",
+									"value": "6836b2852bb410c7d06c1fbb",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/reject-driver",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"reject-driver"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "cewofe8718@nomrista.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "cewofe8718@nomrista.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "send otp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "lanoha4245@cyluna.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/send-otp",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"send-otp"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "superadmin@email.com",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verify email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "kikoj79757@forcrack.com",
+									"type": "text"
+								},
+								{
+									"key": "emailVerifyCode",
+									"value": "7117",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/verify-email",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"verify-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "send otp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "lanoha4245@cyluna.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/send-otp",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"send-otp"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create new password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "lanoha4245@cyluna.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "lanoha4245@cyluna.coM",
+									"type": "text"
+								},
+								{
+									"key": "confirmPassword",
+									"value": "lanoha4245@cyluna.coM",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/reset-password",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "newPassword",
+									"value": "lanoha4245@cyluna.com",
+									"type": "text"
+								},
+								{
+									"key": "confirmNewPassword",
+									"value": "lanoha4245@cyluna.com",
+									"type": "text"
+								},
+								{
+									"key": "oldPassword",
+									"value": "lanoha4245@cyluna.coM",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/change-password",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "get all users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "doctor@email.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "doctor",
+									"type": "text"
+								},
+								{
+									"key": "nhsNumber",
+									"value": "211",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "doctor",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/users",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update user current location",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODRlOGRjNjIyMDk1MThhNWJkZjlmYjUiLCJyb2xlcyI6WyJ1c2VyIl0sImlhdCI6MTc0OTk3ODYzOSwiZXhwIjoxODM2Mzc4NjM5fQ.P4-4UEUplC5Sb1ZJWTsrdxOf7tne9gPeEgIEd2RqRxE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "longitude",
+									"value": "-118.2437",
+									"type": "text"
+								},
+								{
+									"key": "latitude",
+									"value": "34.0522",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/update-location",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"update-location"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get one user by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "doctor@email.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "doctor",
+									"type": "text"
+								},
+								{
+									"key": "nhsNumber",
+									"value": "211",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "doctor",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/6836b2852bb410c7d06c1fbb",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"6836b2852bb410c7d06c1fbb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get own profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODRlOGRjNjIyMDk1MThhNWJkZjlmYjUiLCJyb2xlcyI6WyJ1c2VyIl0sImlhdCI6MTc0OTk3ODYzOSwiZXhwIjoxODM2Mzc4NjM5fQ.P4-4UEUplC5Sb1ZJWTsrdxOf7tne9gPeEgIEd2RqRxE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/auth/profile",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"auth",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update profile by user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODE1YTJiNzM2NTg2NzAzY2NjOWFhNDQiLCJyb2xlcyI6WyJ1c2VyIl0sImlhdCI6MTc0ODI0MjAyMiwiZXhwIjoxODM0NjQyMDIyfQ.zkrTgiGFje0b2GWB5S2A1FonKKvu1tNKx_rfevk3QCE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "hekin ",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/ABIR/Pictures/Screenshots/Screenshot (3).png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/auth/update-profile-by-user",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"auth",
+								"update-profile-by-user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "driver",
+			"item": [
+				{
+					"name": "search driver",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODRlOGRjNjIyMDk1MThhNWJkZjlmYjUiLCJyb2xlcyI6WyJ1c2VyIl0sImlhdCI6MTc0OTk3ODYzOSwiZXhwIjoxODM2Mzc4NjM5fQ.P4-4UEUplC5Sb1ZJWTsrdxOf7tne9gPeEgIEd2RqRxE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "latitude",
+									"value": "34.0502",
+									"type": "text"
+								},
+								{
+									"key": "longitude",
+									"value": "-118.2440",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/drivers/search-drivers",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"drivers",
+								"search-drivers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "estimate ride",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODRlOGRjNjIyMDk1MThhNWJkZjlmYjUiLCJyb2xlcyI6WyJ1c2VyIl0sImlhdCI6MTc0OTk3ODYzOSwiZXhwIjoxODM2Mzc4NjM5fQ.P4-4UEUplC5Sb1ZJWTsrdxOf7tne9gPeEgIEd2RqRxE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "pickupLatitude",
+									"value": "23.8103",
+									"type": "text"
+								},
+								{
+									"key": "pickupLongitude",
+									"value": "90.4125",
+									"type": "text"
+								},
+								{
+									"key": "destinationLatitude",
+									"value": "23.7806",
+									"type": "text"
+								},
+								{
+									"key": "destinationLongitude",
+									"value": "90.2794",
+									"type": "text"
+								},
+								{
+									"key": "numberOfKids",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/drivers/estimate-ride",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"drivers",
+								"estimate-ride"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "request ride",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODRlOGRjNjIyMDk1MThhNWJkZjlmYjUiLCJyb2xlcyI6WyJ1c2VyIl0sImlhdCI6MTc0OTk3ODYzOSwiZXhwIjoxODM2Mzc4NjM5fQ.P4-4UEUplC5Sb1ZJWTsrdxOf7tne9gPeEgIEd2RqRxE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "estimatedFare",
+									"value": "33.88",
+									"type": "text"
+								},
+								{
+									"key": "estimatedTimeMinutes",
+									"value": "28",
+									"type": "text"
+								},
+								{
+									"key": "distance",
+									"value": "13.94",
+									"type": "text"
+								},
+								{
+									"key": "numberOfKids",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "pickupLatitude",
+									"value": "34.0505",
+									"type": "text"
+								},
+								{
+									"key": "pickupLongitude",
+									"value": "-118.2402",
+									"type": "text"
+								},
+								{
+									"key": "pickupPlace",
+									"value": "oklahoma",
+									"type": "text"
+								},
+								{
+									"key": "destination",
+									"value": "texas",
+									"type": "text"
+								},
+								{
+									"key": "estimatedTimeFormatted",
+									"value": "27:53",
+									"type": "text"
+								},
+								{
+									"key": "estimatedTimeReadable",
+									"value": "27 minutes 53 seconds",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/drivers/request-ride",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"drivers",
+								"request-ride"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "requested ride by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODRlOGRjNjIyMDk1MThhNWJkZjlmYjUiLCJyb2xlcyI6WyJ1c2VyIl0sImlhdCI6MTc0OTk3ODYzOSwiZXhwIjoxODM2Mzc4NjM5fQ.P4-4UEUplC5Sb1ZJWTsrdxOf7tne9gPeEgIEd2RqRxE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "estimatedFare",
+									"value": "33.88",
+									"type": "text"
+								},
+								{
+									"key": "estimatedTimeMinutes",
+									"value": "28",
+									"type": "text"
+								},
+								{
+									"key": "distance",
+									"value": "13.94",
+									"type": "text"
+								},
+								{
+									"key": "numberOfKids",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "pickupLatitude",
+									"value": "34.0505",
+									"type": "text"
+								},
+								{
+									"key": "pickupLongitude",
+									"value": "-118.2402",
+									"type": "text"
+								},
+								{
+									"key": "pickupPlace",
+									"value": "oklahoma",
+									"type": "text"
+								},
+								{
+									"key": "destination",
+									"value": "texas",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/drivers/get-all-requested-rides",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"drivers",
+								"get-all-requested-rides"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find requested ride for driver",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM2YjI4NTJiYjQxMGM3ZDA2YzFmYmIiLCJyb2xlcyI6WyJ1c2VyIiwiZHJpdmVyIl0sImlhdCI6MTc1MDIyMjE3MSwiZXhwIjoxODM2NjIyMTcxfQ.NPKAcRQVUErWOoGWwrSnEaJIaZ1DXSeHupUF1a91R1k",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/drivers/find-requested-rides-for-driver?status=requested",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"drivers",
+								"find-requested-rides-for-driver"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "requested"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "accept ride by driver",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM2YjI4NTJiYjQxMGM3ZDA2YzFmYmIiLCJyb2xlcyI6WyJ1c2VyIiwiZHJpdmVyIl0sImlhdCI6MTc1MDIyMjE3MSwiZXhwIjoxODM2NjIyMTcxfQ.NPKAcRQVUErWOoGWwrSnEaJIaZ1DXSeHupUF1a91R1k",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/drivers/accept-ride-request-by-driver/68523ef5f2b84606045c2548",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"drivers",
+								"accept-ride-request-by-driver",
+								"68523ef5f2b84606045c2548"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "arrived at pickup",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM2YjI4NTJiYjQxMGM3ZDA2YzFmYmIiLCJyb2xlcyI6WyJ1c2VyIiwiZHJpdmVyIl0sImlhdCI6MTc1MDIyMjE3MSwiZXhwIjoxODM2NjIyMTcxfQ.NPKAcRQVUErWOoGWwrSnEaJIaZ1DXSeHupUF1a91R1k",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/drivers/arrived-at-pickup/68523ef5f2b84606045c2548",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"drivers",
+								"arrived-at-pickup",
+								"68523ef5f2b84606045c2548"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "start ride",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM2YjI4NTJiYjQxMGM3ZDA2YzFmYmIiLCJyb2xlcyI6WyJ1c2VyIiwiZHJpdmVyIl0sImlhdCI6MTc1MDIyMjE3MSwiZXhwIjoxODM2NjIyMTcxfQ.NPKAcRQVUErWOoGWwrSnEaJIaZ1DXSeHupUF1a91R1k",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/drivers/start-ride/68523ef5f2b84606045c2548",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"drivers",
+								"start-ride",
+								"68523ef5f2b84606045c2548"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "complete ride",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM2YjI4NTJiYjQxMGM3ZDA2YzFmYmIiLCJyb2xlcyI6WyJ1c2VyIiwiZHJpdmVyIl0sImlhdCI6MTc1MDIyMjE3MSwiZXhwIjoxODM2NjIyMTcxfQ.NPKAcRQVUErWOoGWwrSnEaJIaZ1DXSeHupUF1a91R1k",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/drivers/complete-ride/68523ef5f2b84606045c2548",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"drivers",
+								"complete-ride",
+								"68523ef5f2b84606045c2548"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update user current location",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODRlOGRjNjIyMDk1MThhNWJkZjlmYjUiLCJyb2xlcyI6WyJ1c2VyIl0sImlhdCI6MTc1MDIzNzE3NCwiZXhwIjoxODM2NjM3MTc0fQ.RDUmX07iFIY7w6xFb_5g88jFpXSjWGMBSOeOJLU_5Io",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "longitude",
+									"value": "-118.2402",
+									"type": "text"
+								},
+								{
+									"key": "latitude",
+									"value": "34.0505",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/update-location",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"update-location"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "driver overview",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODRlOGRjNjIyMDk1MThhNWJkZjlmYjUiLCJyb2xlcyI6WyJ1c2VyIl0sImlhdCI6MTc1MDIzNzE3NCwiZXhwIjoxODM2NjM3MTc0fQ.RDUmX07iFIY7w6xFb_5g88jFpXSjWGMBSOeOJLU_5Io",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "longitude",
+									"value": "-118.2402",
+									"type": "text"
+								},
+								{
+									"key": "latitude",
+									"value": "34.0505",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/drivers/get-overview",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"drivers",
+								"get-overview"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "rider",
+			"item": [
+				{
+					"name": "history",
+					"item": [
+						{
+							"name": "passenger",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODRlOGRjNjIyMDk1MThhNWJkZjlmYjUiLCJyb2xlcyI6WyJ1c2VyIl0sImlhdCI6MTc1MDIzNzE3NCwiZXhwIjoxODM2NjM3MTc0fQ.RDUmX07iFIY7w6xFb_5g88jFpXSjWGMBSOeOJLU_5Io",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "longitude",
+											"value": "-118.2402",
+											"type": "text"
+										},
+										{
+											"key": "latitude",
+											"value": "34.0505",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseURL}}/rides/history/passenger",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"rides",
+										"history",
+										"passenger"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "driver",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODRlOGRjNjIyMDk1MThhNWJkZjlmYjUiLCJyb2xlcyI6WyJ1c2VyIl0sImlhdCI6MTc1MDIzNzE3NCwiZXhwIjoxODM2NjM3MTc0fQ.RDUmX07iFIY7w6xFb_5g88jFpXSjWGMBSOeOJLU_5Io",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "longitude",
+											"value": "-118.2402",
+											"type": "text"
+										},
+										{
+											"key": "latitude",
+											"value": "34.0505",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseURL}}/rides/history/driver",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"rides",
+										"history",
+										"driver"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "payments",
+			"item": [
+				{
+					"name": "create payment intent",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "appointmentId",
+									"value": "6715eb518613e96252b5d3f1",
+									"type": "text"
+								},
+								{
+									"key": "paymentMethodId",
+									"value": "pm_card_visa",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "5",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/payment/create-payment-intent",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"payment",
+								"create-payment-intent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get one payment intent by id",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "paymentId",
+									"value": "pi_3Q9jmXIE7z8j8FQD0QSzE7mF",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/payment/get-payment-intent",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"payment",
+								"get-payment-intent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all payment intents",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdWx0YXRpb25VcGNvbWluZyI6W10sImVtYWlsVmVyaWZpZWQiOmZhbHNlLCJfaWQiOiI2NzAxMjcyMjUzN2UxNDk1OTliN2ZjMDgiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJFZDVHNaN0tJNS4uWEdvYS41b0xZU3VzdTVqTzVCcEhEb1R2NTFpVjl2eWhZN1IwTWkzWWp1Iiwicm9sZSI6ImFkbWluIiwiZG9jdG9yQXBwbGljYXRpb25TdGF0dXMiOiJub3RBcHBsaWVkIiwiYmFsYW5jZSI6MCwiY29uc3VsdGF0aW9uSGlzdG9yeSI6W10sInVwY29taW5nSGlzdG9yeSI6W10sIm5vdGlmaWNhdGlvbnMiOlsiNjcwMTI3ZWQ3YWQzZWQyYzUzZTQ4OWIzIiwiNjcwMTI4MzU3YWQzZWQyYzUzZTQ4OWJjIiwiNjcwMTJiYjM3YWQzZWQyYzUzZTQ4OWMzIiwiNjcwMzYwYTU2OTM2NjRkMjgyZWFiM2FhIl0sImlzRG9jdG9yIjpmYWxzZSwiaXNWZXJpZmllZCI6ZmFsc2UsImlzQWN0aXZlIjp0cnVlLCJpc0xvY2tlZCI6ZmFsc2UsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMDVUMTE6NDY6NDIuOTYzWiIsInVwZGF0ZWRBdCI6IjIwMjQtMTAtMDdUMDQ6MTY6MzcuMjQ0WiIsIl9fdiI6NCwic2VydmljZXMiOltdLCJpYXQiOjE3Mjk0OTI3MjMsImV4cCI6MTcyOTU3OTEyM30.G3uakQlPLlqgX-037ez_WPUHN-rmu-tobC3Q3SPwKbI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "paymentId",
+									"value": "pi_3Q9jmXIE7z8j8FQD0QSzE7mF",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/payment/get-all-payment-intents",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"payment",
+								"get-all-payment-intents"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "review rating",
+			"item": [
+				{
+					"name": "get all reviews",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "doctorId",
+									"value": "670127ed7ad3ed2c53e489b1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/review/all-reviews",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"review",
+								"all-reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get one review by review id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "doctorId",
+									"value": "670127ed7ad3ed2c53e489b1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/review/get-one-review/67133868c75ea4a61ba42ce3",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"review",
+								"get-one-review",
+								"67133868c75ea4a61ba42ce3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get review by user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "userId",
+									"value": "670b4e40ce98760d0778097f",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/review/review-by-user",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"review",
+								"review-by-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add a review rating",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "review",
+									"value": "what a nice website",
+									"type": "text"
+								},
+								{
+									"key": "rating",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "userId",
+									"value": "670b4e40ce98760d0778097f",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/review/add-review",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"review",
+								"add-review"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update a review rating",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "review",
+									"value": "again and again",
+									"type": "text"
+								},
+								{
+									"key": "rating",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "userId",
+									"value": "670b4e40ce98760d0778097f",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/review/update-review/67133868c75ea4a61ba42ce3",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"review",
+								"update-review",
+								"67133868c75ea4a61ba42ce3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete a review rating",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "review",
+									"value": "again and again",
+									"type": "text"
+								},
+								{
+									"key": "rating",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "userId",
+									"value": "670b4e40ce98760d0778097f",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/review/delete-review/67133868c75ea4a61ba42ce3",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"review",
+								"delete-review",
+								"67133868c75ea4a61ba42ce3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "chats",
+			"item": [
+				{
+					"name": "create/access chat (1 on 1)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODRlOGRjNjIyMDk1MThhNWJkZjlmYjUiLCJyb2xlcyI6WyJ1c2VyIl0sImlhdCI6MTc1MDIzNzE3NCwiZXhwIjoxODM2NjM3MTc0fQ.RDUmX07iFIY7w6xFb_5g88jFpXSjWGMBSOeOJLU_5Io",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "userId",
+									"value": "6836b2852bb410c7d06c1fbb",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/chats/access",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"chats",
+								"access"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fetch all chats of a logged in user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "question",
+									"value": "why should i use this",
+									"type": "text"
+								},
+								{
+									"key": "answer",
+									"value": "because this is amazing",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/chats/fetch",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"chats",
+								"fetch"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "messages",
+			"item": [
+				{
+					"name": "send message (1 on 1)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM2YjI4NTJiYjQxMGM3ZDA2YzFmYmIiLCJyb2xlcyI6WyJ1c2VyIiwiZHJpdmVyIl0sImlhdCI6MTc1MDgzMzg0MSwiZXhwIjoxODM3MjMzODQxfQ.b3RSDqglwTV1IeORTzoxIdi1Ofkoq4YFlVvaSPOu5PQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "chatId",
+									"value": "685a370265d0265dcc18ba0a",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "Hey i reached at your place",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/messages/send",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"messages",
+								"send"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fetch all messages for a chat",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODRlOGRjNjIyMDk1MThhNWJkZjlmYjUiLCJyb2xlcyI6WyJ1c2VyIl0sImlhdCI6MTc1MDIzNzE3NCwiZXhwIjoxODM2NjM3MTc0fQ.RDUmX07iFIY7w6xFb_5g88jFpXSjWGMBSOeOJLU_5Io",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/messages/get-all-messages/685a370265d0265dcc18ba0a",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"messages",
+								"get-all-messages",
+								"685a370265d0265dcc18ba0a"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "terms of service",
+			"item": [
+				{
+					"name": "get all terms of services",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "doctorId",
+									"value": "670127ed7ad3ed2c53e489b1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/terms-of-service/get-terms-of-service",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"terms-of-service",
+								"get-terms-of-service"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add terms of service",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "content",
+									"value": "Terms of service (also known as terms of use and terms and conditions, commonly abbreviated as TOS or ToS, ToU or T&C) are the legal agreements between a service provider and a person who wants to use that service. The person must agree to abide by the terms of service in order to use the offered service",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/terms-of-service/add-terms-of-service",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"terms-of-service",
+								"add-terms-of-service"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "faqs",
+			"item": [
+				{
+					"name": "add faq",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "question",
+									"value": "why should i use this",
+									"type": "text"
+								},
+								{
+									"key": "answer",
+									"value": "because this is amazing",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/faq/add-faq?question=why should i use this&answer=because this is amazing",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"faq",
+								"add-faq"
+							],
+							"query": [
+								{
+									"key": "question",
+									"value": "why should i use this"
+								},
+								{
+									"key": "answer",
+									"value": "because this is amazing"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all faqs",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "question",
+									"value": "why should i use this",
+									"type": "text"
+								},
+								{
+									"key": "answer",
+									"value": "because this is amazing",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/faq/get-all-faqs",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"faq",
+								"get-all-faqs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update faq",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/faq/update-faq?faqId=671377457972711a62117aa8&question=updated question&answer=updated answer",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"faq",
+								"update-faq"
+							],
+							"query": [
+								{
+									"key": "faqId",
+									"value": "671377457972711a62117aa8"
+								},
+								{
+									"key": "question",
+									"value": "updated question"
+								},
+								{
+									"key": "answer",
+									"value": "updated answer"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete an faq",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "question",
+									"value": "why should i use this",
+									"type": "text"
+								},
+								{
+									"key": "answer",
+									"value": "because this is amazing",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/faq/delete-faq/6713783a86dc46f0be7e470e",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"faq",
+								"delete-faq",
+								"6713783a86dc46f0be7e470e"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURLKennedy",
+			"value": "http://localhost:3002"
+		},
+		{
+			"key": "authToken",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "authToken",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
