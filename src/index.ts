@@ -84,6 +84,8 @@ const PORT = process.env.PORT || 3001;
 // Create HTTP server and attach Socket.IO
 const httpServer = http.createServer(app);
 const io = new SocketIOServer(httpServer, {
+  // for closing connection after 60 seconds of inactivity
+  pingTimeout: 60000, // 60 seconds
   cors: {
     origin: "*", // Adjust as needed for production
     methods: ["GET", "POST"],
@@ -132,6 +134,7 @@ io.on("connection", (socket) => {
   });
   // 2. join room (param: room id / chatId)
   socket.on("join chat", (room) => {
+    //create room with room id / chatId
     socket.join(room); // Join the user to the room id
     console.log("User joined room:", room);
   });
