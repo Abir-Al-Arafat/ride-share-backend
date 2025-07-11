@@ -18,6 +18,7 @@ import chatRouter from "./routes/chat.routes";
 import messageRouter from "./routes/message.routes";
 
 import { IUser } from "./interfaces/user.interface";
+import { IMessage } from "./interfaces/message.interface";
 
 const app = express();
 dotenv.config();
@@ -152,7 +153,7 @@ io.on("connection", (socket) => {
     //   [key: string]: any;
     // }
 
-    interface Message {
+    interface IMessage {
       chatId: string;
       content: string;
       sender: IUser;
@@ -161,7 +162,7 @@ io.on("connection", (socket) => {
     }
 
     (users as IUser[]).forEach((user: IUser) => {
-      if (user._id == (newMessage as Message).sender._id) return; // Skip sending to self
+      if (user._id == (newMessage as IMessage).sender._id) return; // Skip sending to self
       if (typeof user._id === "string")
         socket.in(user._id).emit("message received", newMessage);
     });
