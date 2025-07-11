@@ -17,6 +17,8 @@ import rideRouter from "./routes/ride.routes";
 import chatRouter from "./routes/chat.routes";
 import messageRouter from "./routes/message.routes";
 
+import { IUser } from "./interfaces/user.interface";
+
 const app = express();
 dotenv.config();
 
@@ -115,7 +117,7 @@ io.on("connection", (socket) => {
 
       if (
         typeof parsedUserData !== "object" ||
-        parsedUserData === null ||
+        !parsedUserData ||
         !parsedUserData._id
       ) {
         console.error("Invalid user data:", parsedUserData);
@@ -145,22 +147,23 @@ io.on("connection", (socket) => {
     console.log("New message received:", newMessage);
     if (!users)
       return console.error("Users array is required in new message event");
-    interface User {
-      _id: string;
-      [key: string]: any;
-    }
+    // interface IUser {
+    //   _id: string;
+    //   [key: string]: any;
+    // }
 
     interface Message {
       chatId: string;
       content: string;
-      sender: User;
-      users: User[];
+      sender: IUser;
+      users: IUser[];
       [key: string]: any;
     }
 
-    (users as User[]).forEach((user: User) => {
+    (users as IUser[]).forEach((user: IUser) => {
       if (user._id == (newMessage as Message).sender._id) return; // Skip sending to self
-      socket.in(user._id).emit("message received", newMessage);
+      if (typeof user._id === "string")
+        socket.in(user._id).emit("message received", newMessage);
     });
     // io.to(chatId).emit("message received", { chatId, content, sender }); // Broadcast to all clients (or use socket.to(room).emit for rooms)
   });
