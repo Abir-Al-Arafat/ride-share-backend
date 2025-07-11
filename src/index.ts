@@ -60,10 +60,10 @@ app.use(`${baseApiUrl}/messages`, messageRouter);
 
 app.get("/", (req, res) => {
   return res.status(200).send({
-    name: "Patreon",
+    name: "Kids Ride Sharing Backend",
     developer: "Abir",
     version: "1.0.0",
-    description: "Backend server for Patreon",
+    description: "Backend server for Kids Ride Sharing Backendnd",
     status: "success",
   });
 });
