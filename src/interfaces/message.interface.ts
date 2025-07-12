@@ -1,4 +1,7 @@
-import { IUser } from "./user.interface";
+interface IUser {
+  _id: string;
+  [key: string]: any;
+}
 export interface IMessage {
   chatId: string;
   content: string;

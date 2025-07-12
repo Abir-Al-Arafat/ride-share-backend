@@ -153,14 +153,6 @@ io.on("connection", (socket) => {
       [key: string]: any;
     }
 
-    interface IMessage {
-      chatId: string;
-      content: string;
-      sender: IUser;
-      users: IUser[];
-      [key: string]: any;
-    }
-
     (users as IUser[]).forEach((user: IUser) => {
       if (user._id == (newMessage as IMessage).sender._id) return; // Skip sending to self
       if (typeof user._id === "string")
