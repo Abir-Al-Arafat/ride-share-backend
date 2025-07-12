@@ -17,7 +17,6 @@ import rideRouter from "./routes/ride.routes";
 import chatRouter from "./routes/chat.routes";
 import messageRouter from "./routes/message.routes";
 
-// import { IUser } from "./interfaces/user.interface";
 import IMessage, { IUser } from "./interfaces/message.interface";
 
 const app = express();
@@ -148,10 +147,6 @@ io.on("connection", (socket) => {
     console.log("New message received:", newMessage);
     if (!users)
       return console.error("Users array is required in new message event");
-    // interface IUser {
-    //   _id: string | { toString: () => string };
-    //   [key: string]: any;
-    // }
 
     const convertedUsers = users.map((user: IUser) => {
       if (typeof user._id !== "string") {
