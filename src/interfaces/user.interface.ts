@@ -2,7 +2,7 @@ import { Model, ObjectId } from "mongoose";
 import { Request } from "express";
 
 export interface IUser {
-  _id?: ObjectId | string;
+  _id?: ObjectId; // Optional for new users
   name?: string;
   username?: string;
   email?: string;
