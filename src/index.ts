@@ -149,11 +149,28 @@ io.on("connection", (socket) => {
     if (!users)
       return console.error("Users array is required in new message event");
     interface IUser {
-      _id: string;
+      _id: string | { toString: () => string };
       [key: string]: any;
     }
 
-    (users as IUser[]).forEach((user: IUser) => {
+    const convertedUsers = users.map((user: IUser) => {
+      if (typeof user._id !== "string") {
+        console.error("User ID is not a string:", user._id);
+        // if (
+        //   user._id
+        //   // &&
+        //   // typeof user._id === "object" &&
+        //   // typeof (user._id as { toString?: () => string }).toString ===
+        //   //   "function"
+        // ) {
+        return (user._id as { toString: () => string }).toString(); // Convert ObjectId to string
+        // }
+        return ""; // or handle error appropriately
+      }
+      return user._id;
+    });
+
+    (convertedUsers as IUser[]).forEach((user: IUser) => {
       if (user._id == (newMessage as IMessage).sender._id) return; // Skip sending to self
       if (typeof user._id === "string")
         socket.in(user._id).emit("message received", newMessage);
