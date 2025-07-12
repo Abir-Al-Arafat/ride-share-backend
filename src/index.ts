@@ -136,8 +136,11 @@ io.on("connection", (socket) => {
   });
   // 2. join room (param: room id / chatId)
   socket.on("join chat", (room) => {
+    console.log("User joining room:", room);
+    console.log("User joining room room.chatId:", room.chatId);
+    console.log("User joining room room.chatId type:", typeof room.chatId);
     //create room with room id / chatId
-    socket.join(room); // Join the user to the room id
+    socket.join(room.chatId); // Join the user to the room id
     console.log("User joined room:", room);
   });
 
@@ -148,36 +151,15 @@ io.on("connection", (socket) => {
     if (!users)
       return console.error("Users array is required in new message event");
 
-    const convertedUsers = users.map((user: IUser) => {
-      if (typeof user._id !== "string") {
-        console.error("User ID is not a string:", user._id);
-        // if (
-        //   user._id
-        //   // &&
-        //   // typeof user._id === "object" &&
-        //   // typeof (user._id as { toString?: () => string }).toString ===
-        //   //   "function"
-        // ) {
-        return (user._id as { toString: () => string }).toString(); // Convert ObjectId to string
-        // }
-        return ""; // or handle error appropriately
-      }
-      return user._id;
-    });
-
-    (convertedUsers as IUser[]).forEach((user: IUser) => {
+    (users as IUser[]).forEach((user: IUser) => {
       if (user._id == (newMessage as IMessage).sender._id) return; // Skip sending to self
       if (typeof user._id === "string")
         socket.in(user._id).emit("message received", newMessage);
+      console.log("Message sent to user:", user._id);
+      console.log("Message sent to user:", user._id);
+      console.log("Message sent to user typeof user._id:", typeof user._id);
     });
     // io.to(chatId).emit("message received", { chatId, content, sender }); // Broadcast to all clients (or use socket.to(room).emit for rooms)
-  });
-
-  // Example event
-  socket.on("sendMessage", (data) => {
-    // Broadcast to all clients (or use socket.to(room).emit for rooms)
-    console.log("Message received:", data);
-    io.emit("receiveMessage", data);
   });
 
   socket.on("disconnect", () => {
