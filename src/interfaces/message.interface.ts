@@ -1,8 +1,8 @@
-interface IUser {
+export interface IUser {
   _id: string;
   [key: string]: any;
 }
-export interface IMessage {
+export default interface IMessage {
   chatId: string;
   content: string;
   sender: IUser;
