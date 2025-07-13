@@ -17,8 +17,6 @@ import rideRouter from "./routes/ride.routes";
 import chatRouter from "./routes/chat.routes";
 import messageRouter from "./routes/message.routes";
 
-import IMessage, { IUser } from "./interfaces/message.interface";
-
 const app = express();
 dotenv.config();
 
@@ -87,7 +85,7 @@ const PORT = process.env.PORT || 3001;
 const httpServer = http.createServer(app);
 const io = initSocket(httpServer);
 
-// Register chat handlers (can add more handlers for notifications, location, etc.)
+// Register chat handlers
 registerChatHandlers(io);
 
 databaseConnection(() => {
@@ -95,5 +93,3 @@ databaseConnection(() => {
     console.log(`Server running on port ${PORT}`);
   });
 });
-
-// export { io }; // Export if you want to use io elsewhere
