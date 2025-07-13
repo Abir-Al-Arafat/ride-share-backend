@@ -8,6 +8,7 @@ import passport from "passport";
 // import io from "socket.io";
 import http from "http";
 import { Server as SocketIOServer } from "socket.io";
+import { initSocket } from "./config/socket";
 import databaseConnection from "./config/database";
 import userRouter from "./routes/user.routes";
 import authRouter from "./routes/auth.routes";
@@ -85,15 +86,7 @@ const PORT = process.env.PORT || 3001;
 
 // Create HTTP server and attach Socket.IO
 const httpServer = http.createServer(app);
-const io = new SocketIOServer(httpServer, {
-  // for closing connection after 60 seconds of inactivity
-  pingTimeout: 60000, // 60 seconds
-  cors: {
-    origin: "*", // Adjust as needed for production
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-});
+const io = initSocket(httpServer);
 
 // Socket.IO connection handler
 io.on("connection", (socket) => {
