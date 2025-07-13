@@ -9,6 +9,7 @@ import passport from "passport";
 import http from "http";
 import { Server as SocketIOServer } from "socket.io";
 import { initSocket } from "./config/socket";
+import { registerChatHandlers } from "./services/chat.service.socket";
 import databaseConnection from "./config/database";
 import userRouter from "./routes/user.routes";
 import authRouter from "./routes/auth.routes";
@@ -88,77 +89,8 @@ const PORT = process.env.PORT || 3001;
 const httpServer = http.createServer(app);
 const io = initSocket(httpServer);
 
-// Socket.IO connection handler
-io.on("connection", (socket) => {
-  console.log("A user connected:", socket.id);
-
-  // chat steps:
-  // 1. create room
-  socket.on("setup", (userData) => {
-    try {
-      let parsedUserData = userData;
-      if (typeof userData !== "object") {
-        try {
-          parsedUserData = JSON.parse(userData);
-        } catch (parseErr) {
-          console.error("Error parsing user data:", parseErr);
-          // Send error response to client
-          socket.emit("setup_error", { message: "Invalid user data format." });
-          return;
-        }
-      }
-
-      if (
-        typeof parsedUserData !== "object" ||
-        !parsedUserData ||
-        !parsedUserData._id
-      ) {
-        console.error("Invalid user data:", parsedUserData);
-        // Send error response to client
-        socket.emit("setup_error", { message: "User data must have an _id." });
-        return;
-      }
-      // create room based on user ID
-      socket.join(parsedUserData._id);
-      socket.emit("connected", { message: "room created." }); // Success response
-      console.log("User setup complete:", parsedUserData._id);
-      console.log("User setup complete:", parsedUserData);
-    } catch (error) {
-      socket.emit("setup_error", { message: "Internal server error." });
-    }
-  });
-  // 2. join room (param: room id / chatId)
-  socket.on("join chat", (room) => {
-    console.log("User joining room:", room);
-    console.log("User joining room room.chatId:", room.chatId);
-    console.log("User joining room room.chatId type:", typeof room.chatId);
-    //create room with room id / chatId
-    socket.join(room.chatId); // Join the user to the room id
-    console.log("User joined room:", room);
-  });
-
-  // 3. get message and send to rooms
-  socket.on("new message", (newMessage) => {
-    const { chatId, content, sender, users } = newMessage;
-    console.log("New message received:", newMessage);
-    if (!users)
-      return console.error("Users array is required in new message event");
-
-    (users as IUser[]).forEach((user: IUser) => {
-      if (user._id == (newMessage as IMessage).sender._id) return; // Skip sending to self
-      if (typeof user._id === "string")
-        socket.in(user._id).emit("message received", newMessage);
-      console.log("Message sent to user:", user._id);
-      console.log("Message sent to user:", user._id);
-      console.log("Message sent to user typeof user._id:", typeof user._id);
-    });
-    // io.to(chatId).emit("message received", { chatId, content, sender }); // Broadcast to all clients (or use socket.to(room).emit for rooms)
-  });
-
-  socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
-  });
-});
+// Register chat handlers (can add more handlers for notifications, location, etc.)
+registerChatHandlers(io);
 
 databaseConnection(() => {
   httpServer.listen(PORT, () => {
