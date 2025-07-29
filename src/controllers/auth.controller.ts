@@ -68,7 +68,7 @@ const verifyEmail = async (req: Request, res: Response) => {
     if (!email || !emailVerifyCode) {
       return res
         .status(HTTP_STATUS.BAD_REQUEST)
-        .send(failure("Please provide phone number and code"));
+        .send(failure("Please provide email and code"));
     }
 
     const isVerified = await User.findOne({
