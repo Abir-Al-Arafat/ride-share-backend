@@ -13,22 +13,37 @@ import { UserRequest } from "../interfaces/user.interface";
 
 const getAllUsers = async (req: Request, res: Response) => {
   try {
-    const { role, isAffiliate, isActive } = req.query;
+    const { search, role, isActive } = req.query;
+    const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+    const limit = req.query.limit
+      ? parseInt(req.query.limit as string, 10)
+      : 10;
     const query: IQuery = {};
 
-    if (role) {
-      query.role = role as string;
+    if (search && typeof search === "string") {
+      query.email = { $regex: new RegExp(search, "i") };
     }
 
-    if (typeof isAffiliate !== "undefined") {
-      query.isAffiliate = isAffiliate === "true";
+    if (role) {
+      let rolesArray: string[] = [];
+      if (Array.isArray(role)) {
+        rolesArray = role.map((r) => r.toString());
+      } else {
+        rolesArray = [role.toString()];
+      }
+      query.roles = { $in: rolesArray };
     }
 
     if (typeof isActive !== "undefined") {
       query.isActive = isActive === "true";
     }
 
-    const users = await User.find(query).select("-__v");
+    const skip = (page - 1) * limit;
+    const users = await User.find(query)
+      .select("-__v")
+      .skip(skip)
+      .limit(limit)
+      .populate("passportIdentity");
     const count = await User.countDocuments(query);
 
     if (users.length) {
@@ -36,6 +51,9 @@ const getAllUsers = async (req: Request, res: Response) => {
         success("Successfully received all users", {
           result: users,
           count,
+          page,
+          limit,
+          totalPages: Math.ceil(count / limit),
         })
       );
     } else {
