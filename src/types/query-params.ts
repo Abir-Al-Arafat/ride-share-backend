@@ -3,7 +3,8 @@ export interface CreateUserQueryParams {
 }
 
 export interface IQuery {
-  role?: string;
+  email?: string | { $regex: RegExp };
+  roles?: string | { $in: string[] };
   isAffiliate?: boolean;
   isActive?: boolean;
 }
