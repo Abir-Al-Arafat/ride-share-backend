@@ -414,7 +414,15 @@ const changePassword = async (req: UserRequest, res: Response) => {
     //     .send(failure("Password reset failed", validation[0].msg));
     // }
 
+    if (!(req as UserRequest)?.user || !(req as UserRequest)?.user?._id) {
+      return res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .send(failure("User not logged in"));
+    }
+
     const { oldPassword, newPassword, confirmNewPassword } = req.body;
+
+    console.log("req.body", req.body);
 
     if (!oldPassword || !newPassword || !confirmNewPassword) {
       return res
