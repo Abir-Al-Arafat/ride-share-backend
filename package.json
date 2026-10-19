@@ -4,9 +4,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node api.js && tsc --build",
-    "start": "node api.js && node dist/index.js",
-    "dev": "node api.js && nodemon src/index.ts"
+    "build": "node init && tsc --build",
+    "start": "node init && node dist/index.js",
+    "dev": "node init && nodemon src/index.ts"
   },
   "keywords": [],
   "author": "",
